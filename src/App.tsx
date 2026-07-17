@@ -42,14 +42,25 @@ export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
-      if (window.scrollY > 500) {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > 500) {
         setShowScrollTop(true);
       } else {
         setShowScrollTop(false);
       }
+
+      // Automatically close mobile navigation menu when scrolling down
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setMobileMenuOpen(false);
+      }
+      
+      lastScrollY = currentScrollY;
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -209,60 +220,60 @@ export default function App() {
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
-      </nav>
 
-      {/* Mobile Drawer Navigation Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-b border-outline-variant/25 bg-surface-container-low/95 backdrop-blur-md relative z-30"
-          >
-            <div className="px-6 py-8 space-y-6 flex flex-col font-mono text-sm uppercase tracking-widest">
-              <button 
-                onClick={() => navigateTo('home')}
-                className={`text-left ${activePage === 'home' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
-              >
-                Home
-              </button>
-              <button 
-                onClick={() => navigateTo('process')}
-                className={`text-left ${activePage === 'process' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
-              >
-                Our Process
-              </button>
-              <button 
-                onClick={() => navigateTo('capabilities')}
-                className={`text-left ${activePage === 'capabilities' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
-              >
-                Why Us
-              </button>
-              {/* <button 
-                onClick={() => navigateTo('portfolio')}
-                className={`text-left ${activePage === 'portfolio' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
-              >
-                Portfolio
-              </button> */}
-              <button 
-                onClick={() => navigateTo('contact')}
-                className={`text-left ${activePage === 'contact' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
-              >
-                Call Us
-              </button>
-              <div className="pt-6 border-t border-outline-variant/10">
+        {/* Mobile Drawer Navigation Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden border-b border-outline-variant/25 bg-surface-container-low/95 backdrop-blur-md relative z-30 pointer-events-auto"
+            >
+              <div className="px-6 py-8 space-y-6 flex flex-col font-mono text-sm uppercase tracking-widest">
                 <button 
-                  onClick={() => navigateTo('pipeline')}
-                  className="w-full text-center flex items-center justify-center gap-2 bg-primary-container/10 border border-primary-container/30 text-primary-container py-3 rounded font-bold hover:bg-primary-container/25 transition-all"
+                  onClick={() => navigateTo('home')}
+                  className={`text-left ${activePage === 'home' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
-                  Portal Login <ArrowUpRight className="w-4 h-4" />
+                  Home
                 </button>
+                <button 
+                  onClick={() => navigateTo('process')}
+                  className={`text-left ${activePage === 'process' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
+                >
+                  Our Process
+                </button>
+                <button 
+                  onClick={() => navigateTo('capabilities')}
+                  className={`text-left ${activePage === 'capabilities' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
+                >
+                  Why Us
+                </button>
+                {/* <button 
+                  onClick={() => navigateTo('portfolio')}
+                  className={`text-left ${activePage === 'portfolio' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
+                >
+                  Portfolio
+                </button> */}
+                <button 
+                  onClick={() => navigateTo('contact')}
+                  className={`text-left ${activePage === 'contact' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
+                >
+                  Call Us
+                </button>
+                <div className="pt-6 border-t border-outline-variant/10">
+                  <button 
+                    onClick={() => navigateTo('pipeline')}
+                    className="w-full text-center flex items-center justify-center gap-2 bg-primary-container/10 border border-primary-container/30 text-primary-container py-3 rounded font-bold hover:bg-primary-container/25 transition-all"
+                  >
+                    Portal Login <ArrowUpRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
 
       {/* Main Page Render Section with Transitions */}
       <main className="flex-grow z-10">
