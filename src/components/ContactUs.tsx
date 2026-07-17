@@ -179,7 +179,7 @@ export default function ContactUs() {
               <label className="font-sans text-xs text-on-surface-variant block mb-3 text-center">Human Verification</label>
               <div className="flex flex-col items-center justify-center gap-2">
                 <ReCAPTCHA
-                  sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
                   onChange={(value) => {
                     setCaptchaValue(value);
                     if (errors.captcha) setErrors({...errors, captcha: ''});
