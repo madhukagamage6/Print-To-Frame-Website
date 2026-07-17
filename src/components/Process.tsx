@@ -81,14 +81,14 @@ export default function Process({ onNavigate }: ProcessProps) {
 
   const getIcon = (iconName: string) => {
     switch (iconName) {
-      case 'QrCode': return <QrCode className="w-6 h-6 text-primary-container text-glow" />;
-      case 'Users': return <Users className="w-6 h-6 text-primary-container text-glow" />;
-      case 'Coins': return <Coins className="w-6 h-6 text-primary-container text-glow" />;
-      case 'Warehouse': return <Warehouse className="w-6 h-6 text-primary-container text-glow" />;
-      case 'Hammer': return <Hammer className="w-6 h-6 text-primary-container text-glow" />;
-      case 'Truck': return <Truck className="w-6 h-6 text-primary-container text-glow" />;
-      case 'LockKeyhole': return <LockKeyhole className="w-6 h-6 text-primary-container text-glow" />;
-      default: return <Briefcase className="w-6 h-6 text-primary-container text-glow" />;
+      case 'QrCode': return <QrCode className="w-6 h-6 text-primary" />;
+      case 'Users': return <Users className="w-6 h-6 text-primary" />;
+      case 'Coins': return <Coins className="w-6 h-6 text-primary" />;
+      case 'Warehouse': return <Warehouse className="w-6 h-6 text-primary" />;
+      case 'Hammer': return <Hammer className="w-6 h-6 text-primary" />;
+      case 'Truck': return <Truck className="w-6 h-6 text-primary" />;
+      case 'LockKeyhole': return <LockKeyhole className="w-6 h-6 text-primary" />;
+      default: return <Briefcase className="w-6 h-6 text-primary" />;
     }
   };
 
@@ -96,11 +96,11 @@ export default function Process({ onNavigate }: ProcessProps) {
     <div className="w-full max-w-5xl mx-auto px-6 md:px-12 pt-12 pb-24 relative">
       {/* Top Header */}
       <header className="mb-20 max-w-3xl">
-        <span className="font-mono text-xs text-primary-container tracking-[0.2em] uppercase mb-4 block">
+        <span className="font-mono text-xs text-primary tracking-[0.2em] uppercase mb-4 block">
           Service Delivery Protocol // Active
         </span>
         <h1 className="font-display text-4xl sm:text-5xl text-on-surface mb-6 tracking-tight">
-          The 7-Act <span className="text-primary-container text-glow">Operational</span> Pipeline
+          The 7-Act <span className="text-primary text-glow">Operational</span> Pipeline
         </h1>
         <p className="font-sans text-on-surface-variant text-base sm:text-lg leading-relaxed">
           A rigorous, end-to-end service delivery model. From initial referral scan to final payment verification, every stage is tracked, engineered, and executed with precision to guarantee seamless handover.
@@ -110,8 +110,8 @@ export default function Process({ onNavigate }: ProcessProps) {
       {/* Interactive Timeline Pipeline Layout */}
       <div className="relative">
         {/* Center Line for Desktop Timeline */}
-        <div className="absolute left-[30px] md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-primary-container/40 via-outline-variant/20 to-transparent transform -translate-x-1/2 pointer-events-none hidden md:block"></div>
-        <div className="absolute left-[30px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-primary-container/40 via-outline-variant/20 to-transparent pointer-events-none md:hidden"></div>
+        <div className="absolute left-[30px] md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-primary/40 via-outline-variant/20 to-transparent transform -translate-x-1/2 pointer-events-none hidden md:block"></div>
+        <div className="absolute left-[30px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-primary/40 via-outline-variant/20 to-transparent pointer-events-none md:hidden"></div>
 
         <div className="space-y-12">
           {steps.map((step, idx) => {
@@ -129,7 +129,7 @@ export default function Process({ onNavigate }: ProcessProps) {
               >
                 {/* Timeline node icon */}
                 <div 
-                  className="absolute left-[30px] md:left-1/2 w-12 h-12 rounded-lg bg-surface-container-high border border-primary-container/50 shadow-[0_0_15px_rgba(0,218,243,0.2)] flex items-center justify-center transform -translate-x-1/2 z-20 cursor-pointer hover:scale-110 transition-transform duration-300"
+                  className="absolute left-[30px] md:left-1/2 w-12 h-12 rounded-lg bg-surface-container-high border border-primary/50 shadow-[0_0_15px_rgba(0,218,243,0.2)] flex items-center justify-center transform -translate-x-1/2 z-20 cursor-pointer hover:scale-110 transition-transform duration-300"
                   onClick={() => setActiveStep(isOpen ? null : idx)}
                 >
                   {getIcon(step.icon)}
@@ -139,18 +139,18 @@ export default function Process({ onNavigate }: ProcessProps) {
                 <div className={`w-full md:w-[45%] pl-16 md:pl-0 ${isLeft ? 'md:pr-12' : 'md:pl-12'}`}>
                   <div 
                     onClick={() => setActiveStep(isOpen ? null : idx)}
-                    className="glass-panel p-6 hover:border-primary-container/40 transition-all duration-300 shadow-[0_0_15px_rgba(0,218,243,0.05)] cursor-pointer select-none group"
+                    className="glass-panel p-6 hover:border-primary/40 transition-all duration-300 shadow-[0_0_15px_rgba(0,218,243,0.05)] cursor-pointer select-none group"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <span className="font-mono text-[10px] text-primary/70 tracking-widest block uppercase mb-1">
                           {step.act}
                         </span>
-                        <h2 className="font-display text-lg text-on-surface font-semibold group-hover:text-primary-container transition-colors">
+                        <h2 className="font-display text-lg text-on-surface font-semibold group-hover:text-primary transition-colors">
                           {step.title}
                         </h2>
                       </div>
-                      <span className="font-display text-2xl font-bold text-outline-variant/40 group-hover:text-primary-container/20 transition-colors">
+                      <span className="font-display text-2xl font-bold text-on-surface-variant/20 group-hover:text-primary/30 transition-colors">
                         {step.displayNum}
                       </span>
                     </div>
@@ -162,16 +162,16 @@ export default function Process({ onNavigate }: ProcessProps) {
                     {/* Role Tag & Expand Toggle */}
                     <div className="flex justify-between items-center pt-4 border-t border-outline-variant/10">
                       {step.role ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-highest/50 border border-outline-variant/30 rounded text-[11px] font-mono text-primary uppercase">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 border border-primary/20 rounded text-[11px] font-mono text-primary uppercase">
                           Role: {step.role}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-highest/20 border border-outline-variant/10 rounded text-[11px] font-mono text-outline uppercase">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-high border border-outline-variant/30 rounded text-[11px] font-mono text-on-surface-variant uppercase">
                           System Automated
                         </span>
                       )}
 
-                      <span className="text-outline-variant group-hover:text-primary-container transition-colors">
+                      <span className="text-on-surface-variant/60 group-hover:text-primary transition-colors">
                         <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                       </span>
                     </div>
@@ -188,11 +188,11 @@ export default function Process({ onNavigate }: ProcessProps) {
                         >
                           <div className="pt-4 mt-4 border-t border-outline-variant/10 space-y-3 font-mono text-[11px] text-on-surface-variant">
                             <div className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                               <span>Target Verification: Completed immediately via pipeline sync.</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                               <span>Associated Tooling: Google Drive (receipt storage) & Google Sheets (ledger log).</span>
                             </div>
                             {step.role && (
@@ -212,18 +212,18 @@ export default function Process({ onNavigate }: ProcessProps) {
         </div>
       </div>
 
-      {/* Bottom CTA to dashboard */}
+      {/* Bottom CTA to Contact page */}
       <div className="mt-20 text-center">
         <div className="glass-panel p-8 max-w-2xl mx-auto">
-          <h3 className="font-display text-lg text-on-surface font-semibold mb-2">Track & Execute Orders Live</h3>
+          <h3 className="font-display text-xl text-on-surface font-semibold mb-3">Start Your Project with Our Systematical Process</h3>
           <p className="font-sans text-on-surface-variant text-sm mb-6">
-            All 7 acts are wired directly to our Google Workspace ERP pipeline. Sign in to view, create, or update active orders now.
+            Our structured fabrication pipeline ensures error-free mounting, perfect LGS frame precision, and rapid handover. Get in touch with us to begin.
           </p>
           <button 
-            onClick={() => onNavigate('pipeline')}
-            className="inline-flex items-center gap-2 bg-primary-container text-on-primary-container font-mono text-xs uppercase tracking-wider px-6 py-3 rounded hover:bg-primary-fixed hover:shadow-[0_0_15px_rgba(0,218,243,0.3)] transition-all duration-300"
+            onClick={() => onNavigate('contact')}
+            className="inline-flex items-center gap-2 bg-primary text-black font-mono text-xs uppercase tracking-wider px-8 py-4 rounded-md font-semibold hover:shadow-[0_0_20px_rgba(0,218,243,0.4)] transition-all duration-300 transform hover:-translate-y-0.5"
           >
-            Open Live Pipeline <ArrowRight className="w-4 h-4" />
+            Call Us Now <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

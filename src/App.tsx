@@ -85,101 +85,73 @@ export default function App() {
       {/* Background Matrix-styled line layout */}
       <div className="absolute inset-0 technical-grid opacity-15 pointer-events-none z-0"></div>
 
-      {/* Global Top Operations Bar */}
-      <div className="bg-surface-container-lowest/80 backdrop-blur border-b border-outline-variant/10 text-[10px] sm:text-xs font-mono text-outline/80 relative z-40 py-2.5 px-6 md:px-12 flex justify-between items-center">
-        <div className="flex items-center gap-4 sm:gap-6">
-          <span className="hidden lg:flex items-center gap-1.5 uppercase tracking-widest text-primary">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-ping"></span>
-            SYS: ACTIVE
-          </span>
-          <span className="hidden xl:flex items-center gap-1.5">
-            <MapPin className="w-3 h-3 text-primary-container shrink-0" />
-            <span className="truncate max-w-[250px]">No. 58/33 Church Road, Eldeniya, Kadawatha, Sri Lanka.</span>
-          </span>
-          <span className="hidden md:flex items-center gap-1.5">
-            <Mail className="w-3 h-3 text-primary-container shrink-0" />
-            info@print2frame.xyz
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Phone className="w-3 h-3 text-primary-container shrink-0" />
-            +94 71 141 9027
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span>PORT: 3000</span>
-          {user ? (
-            <span className="text-primary-container flex items-center gap-1.5 uppercase tracking-widest text-[10px]">
-              <UserIcon className="w-3 h-3" />
-              {user.displayName || 'Authorized'}
-            </span>
-          ) : (
-            <span className="text-outline/40 uppercase tracking-widest text-[9px]">GUEST_PROT // CLOSED</span>
-          )}
-        </div>
-      </div>
+
 
       {/* Primary Navigation Bar */}
-      <nav className="sticky top-0 z-40 glass-panel border-b border-outline-variant/25 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
-          {/* Logo / Brand */}
+      <nav className="sticky top-0 z-40 transition-all duration-300 pointer-events-none">
+        {/* Main Bar Background */}
+        <div className="absolute top-0 left-0 right-0 h-16 bg-black/90 shadow-sm border-b border-outline-variant/5 pointer-events-auto backdrop-blur-md"></div>
+
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-start justify-between relative z-10">
+          {/* Logo / Brand - Dropdown Section */}
           <div 
             onClick={() => navigateTo('home')} 
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center justify-center cursor-pointer group relative z-50 shrink-0 transition-all duration-300 pointer-events-auto bg-black border border-t-0 border-black rounded-b-[1.5rem] px-4 pb-3 pt-2 shadow-[0_10px_20px_rgba(0,0,0,0.5)] -ml-4"
           >
             <img 
-              src="https://drive.google.com/uc?export=view&id=1JhI1uYBGhpDOREzCj-Xau-Tdom0VfNQn" 
+              src="/logo.png" 
               alt="Print2Frame Logo" 
-              className="h-10 sm:h-12 object-contain filter drop-shadow-[0_0_8px_rgba(0,218,243,0.3)] transition-all duration-300 group-hover:drop-shadow-[0_0_12px_rgba(0,218,243,0.6)]" 
+              className="h-16 sm:h-20 object-contain transition-transform duration-300 group-hover:scale-105" 
               referrerPolicy="no-referrer"
             />
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-8 h-16 pointer-events-auto">
             <button 
               onClick={() => navigateTo('home')}
-              className={`font-mono text-xs uppercase tracking-widest transition-colors ${
-                activePage === 'home' ? 'text-primary font-semibold text-glow' : 'text-on-surface-variant hover:text-primary'
+              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+                activePage === 'home' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Home
             </button>
             <button 
               onClick={() => navigateTo('process')}
-              className={`font-mono text-xs uppercase tracking-widest transition-colors ${
-                activePage === 'process' ? 'text-primary font-semibold text-glow' : 'text-on-surface-variant hover:text-primary'
+              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+                activePage === 'process' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Our Process
             </button>
             <button 
               onClick={() => navigateTo('capabilities')}
-              className={`font-mono text-xs uppercase tracking-widest transition-colors ${
-                activePage === 'capabilities' ? 'text-primary font-semibold text-glow' : 'text-on-surface-variant hover:text-primary'
+              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+                activePage === 'capabilities' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Why Us
             </button>
             <button 
               onClick={() => navigateTo('portfolio')}
-              className={`font-mono text-xs uppercase tracking-widest transition-colors ${
-                activePage === 'portfolio' ? 'text-primary font-semibold text-glow' : 'text-on-surface-variant hover:text-primary'
+              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+                activePage === 'portfolio' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Portfolio
             </button>
             <button 
               onClick={() => navigateTo('contact')}
-              className={`font-mono text-xs uppercase tracking-widest transition-colors ${
-                activePage === 'contact' ? 'text-primary font-semibold text-glow' : 'text-on-surface-variant hover:text-primary'
+              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+                activePage === 'contact' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Call Us
             </button>
           </div>
 
-          {/* Right Action CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Right Action CTA Button - Dropdown Section */}
+          <div className="hidden md:flex items-center gap-4 pointer-events-auto bg-surface-container border border-t-0 border-outline-variant/5 rounded-b-[1.5rem] px-5 pb-4 pt-3 shadow-[0_10px_20px_rgba(0,0,0,0.1)] -mr-4">
             <button 
               onClick={() => navigateTo('pipeline')}
               className="inline-flex items-center gap-1.5 bg-primary-container/10 border border-primary-container/30 text-primary-container font-mono text-[11px] uppercase tracking-wider px-4 py-2 rounded hover:bg-primary-container/25 hover:shadow-[0_0_10px_rgba(0,218,243,0.2)] transition-all duration-300"
@@ -191,7 +163,7 @@ export default function App() {
           {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-on-surface-variant hover:text-on-surface p-2 rounded border border-outline-variant/20 bg-surface-container/40"
+            className="md:hidden mt-3 text-on-surface-variant hover:text-on-surface p-2 rounded border border-outline-variant/20 bg-surface-container/40 pointer-events-auto"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -281,30 +253,39 @@ export default function App() {
 
       {/* Global Slogan/Footer */}
       <footer className="bg-surface-container-lowest/40 border-t border-outline-variant/15 relative z-10">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 grid grid-cols-1 md:grid-cols-12 gap-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10 md:gap-12">
           {/* Brand Col */}
-          <div className="md:col-span-5 space-y-6">
-            <div className="flex items-center gap-3">
-              <img 
-                src="https://drive.google.com/uc?export=view&id=1JhI1uYBGhpDOREzCj-Xau-Tdom0VfNQn" 
-                alt="Print2Frame Logo" 
-                className="h-12 object-contain" 
-                referrerPolicy="no-referrer"
-              />
-            </div>
+          <div className="sm:col-span-2 md:col-span-4 space-y-5">
+            <h2 className="font-display font-bold text-2xl tracking-tight text-on-surface">
+              Print <span className="text-primary">To</span> Frame Pvt Ltd
+            </h2>
             <p className="font-sans text-xs sm:text-sm text-on-surface-variant max-w-sm leading-relaxed">
-              Professional skeletal steel systems custom roll-formed in Kadawatha. Structured, transacted, and closed immutably via live Workspace databases.
+              Professional skeletal steel systems custom roll-formed in Kadawatha. Bringing your designs to life with robust framing solutions.
             </p>
-            <div className="space-y-2 mt-4 font-mono text-xs text-on-surface-variant">
-              <div className="flex items-start gap-2">
+            <div className="pt-2">
+              <span className="inline-block border border-primary/20 bg-primary/5 text-[11px] font-mono text-primary px-3 py-1.5 rounded uppercase tracking-wider">
+                "If there is a print, we make the frame."
+              </span>
+            </div>
+          </div>
+
+          {/* Headquarters / Contact Col */}
+          <div className="sm:col-span-2 md:col-span-3 space-y-4">
+            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">Headquarters</h4>
+            <div className="space-y-3 font-sans text-xs sm:text-sm text-on-surface-variant">
+              <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span>No. 58/33 Church Road, Eldeniya,<br/>Kadawatha, Sri Lanka.</span>
+                <span className="leading-relaxed">
+                  No. 58/33 Church Road,<br />
+                  Eldeniya, Kadawatha,<br />
+                  Sri Lanka.
+                </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5 pt-1">
                 <Mail className="w-4 h-4 text-primary" />
                 <span>info@print2frame.xyz</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-primary" />
                 <span>+94 71 141 9027</span>
               </div>
@@ -312,55 +293,67 @@ export default function App() {
           </div>
 
           {/* Quick links Col */}
-          <div className="md:col-span-3 space-y-4">
-            <h4 className="font-mono text-xs uppercase tracking-widest text-primary">ERP Operations</h4>
+          <div className="col-span-1 md:col-span-2 space-y-4">
+            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">Explore</h4>
             <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-on-surface-variant">
               <li>
-                <button onClick={() => navigateTo('process')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5" /> 7-Act Protocol
+                <button onClick={() => navigateTo('home')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Home
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('capabilities')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5" /> Capabilities
+                <button onClick={() => navigateTo('process')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Our Process
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('portfolio')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5" /> Project Portfolio
+                <button onClick={() => navigateTo('capabilities')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Why Us
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('pipeline')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5" /> Workspace Ledger
+                <button onClick={() => navigateTo('portfolio')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Portfolio
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigateTo('pipeline')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Portal Login
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Technical Specifications metadata Col */}
-          <div className="md:col-span-4 space-y-4">
-            <h4 className="font-mono text-xs uppercase tracking-widest text-primary">Technical Info</h4>
-            <div className="bg-surface-container-high/20 border border-outline-variant/10 rounded-lg p-5 space-y-3 font-mono text-[10px] text-outline/80 leading-relaxed">
-              <div className="flex justify-between">
-                <span>LGS MACHINE</span>
-                <span className="text-on-surface">ROLL-A4 // ONLINE</span>
-              </div>
-              <div className="flex justify-between">
-                <span>CAD INTEGRITY</span>
-                <span className="text-on-surface">BIM-STRESS-PASS</span>
-              </div>
-              <div className="flex justify-between">
-                <span>ERP SYNC STATUS</span>
-                <span className="text-glow text-primary-container">ACTIVE_WS_v1</span>
-              </div>
-            </div>
+          {/* Core Expertise Col */}
+          <div className="col-span-1 md:col-span-3 space-y-4">
+            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">Solutions</h4>
+            <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-on-surface-variant">
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
+                <span>LGS Steel Framing (Light Gauge)</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
+                <span>Digital Flex Printing</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
+                <span>Custom Board Fabrication</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
+                <span>BIM Design & Roll-Forming</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
+                <span>Secure Structural Mounting</span>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-outline-variant/10 py-6 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] font-mono text-outline/50 max-w-7xl mx-auto">
-          <span>&copy; {new Date().getFullYear()} PRINT TO FRAME INDUSTRIES. ALL RIGHTS RESERVED.</span>
-          <span>SYS.VER: 4.15 // KADAWATHA WORKSHOP</span>
+        <div className="border-t border-outline-variant/10 py-6 px-6 md:px-12 flex flex-col justify-center items-center gap-4 text-[10px] font-mono text-outline/50 max-w-7xl mx-auto">
+          <span>&copy; {new Date().getFullYear()} PRINT TO FRAME PVT LTD. ALL RIGHTS RESERVED.</span>
         </div>
       </footer>
     </div>

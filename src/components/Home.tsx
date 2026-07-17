@@ -59,16 +59,16 @@ export default function Home({ onNavigate }: HomeProps) {
             className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
           >
             <button 
-              onClick={() => onNavigate('pipeline')}
+              onClick={() => onNavigate('contact')}
               className="w-full sm:w-auto bg-primary-container text-on-primary-container font-mono text-xs uppercase tracking-wider px-8 py-4 rounded-md font-semibold hover:bg-primary-fixed hover:shadow-[0_0_20px_rgba(0,218,243,0.4)] transition-all duration-300 transform hover:-translate-y-0.5"
             >
-              Request a Project Estimate
+              Start Your Project Now
             </button>
             <button 
               onClick={() => onNavigate('process')}
               className="w-full sm:w-auto bg-transparent text-primary border border-outline-variant hover:border-primary-container hover:bg-primary/5 px-8 py-4 rounded-md font-mono text-xs uppercase tracking-wider transition-all duration-300"
             >
-              Explore the Technology
+              Explore Our Process
             </button>
           </motion.div>
         </div>
@@ -102,7 +102,6 @@ export default function Home({ onNavigate }: HomeProps) {
                   From small shop signs to massive roadside business billboards, we construct the physical backbone of your brand visibility.
                 </p>
               </div>
-              <div className="relative z-10 mt-auto pt-6 border-t border-outline-variant/10 text-right font-mono text-xs text-outline/40">SYS: 01</div>
             </motion.div>
 
             {/* Card 2 - Standard Size */}
@@ -125,23 +124,23 @@ export default function Home({ onNavigate }: HomeProps) {
             {/* Card 3 - Tall (Data Stream style) */}
             <motion.div 
               whileHover={{ y: -5 }}
-              className="glass-panel p-6 flex flex-col group hover:border-primary-container/40 transition-all duration-300 lg:col-span-1 lg:row-span-2 bg-primary-container text-on-primary-container border-none"
+              className="glass-panel p-6 flex flex-col group hover:border-primary-container/40 transition-all duration-300 lg:col-span-1 lg:row-span-2"
             >
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xs uppercase tracking-widest font-bold">Rapid Delivery</h3>
-                <Zap className="w-5 h-5 opacity-50" />
+                <h3 className="text-xs uppercase tracking-widest font-mono text-primary font-bold">Rapid Delivery</h3>
+                <Zap className="w-5 h-5 text-primary opacity-80" />
               </div>
               <div className="space-y-4 mb-8">
-                <div className="h-1 bg-on-primary-container/20 w-full rounded-full overflow-hidden"><div className="h-full bg-on-primary-container w-4/5"></div></div>
-                <div className="h-1 bg-on-primary-container/20 w-full rounded-full overflow-hidden"><div className="h-full bg-on-primary-container w-2/5"></div></div>
-                <div className="h-1 bg-on-primary-container/20 w-full rounded-full overflow-hidden"><div className="h-full bg-on-primary-container w-3/5"></div></div>
+                <div className="h-1 bg-outline-variant/30 w-full rounded-full overflow-hidden"><div className="h-full bg-primary w-4/5 shadow-[0_0_8px_rgba(0,218,243,0.5)]"></div></div>
+                <div className="h-1 bg-outline-variant/30 w-full rounded-full overflow-hidden"><div className="h-full bg-primary w-2/5 shadow-[0_0_8px_rgba(0,218,243,0.5)]"></div></div>
+                <div className="h-1 bg-outline-variant/30 w-full rounded-full overflow-hidden"><div className="h-full bg-primary w-3/5 shadow-[0_0_8px_rgba(0,218,243,0.5)]"></div></div>
               </div>
-              <p className="font-sans text-on-primary-container/80 text-sm leading-relaxed mb-6">
+              <p className="font-sans text-on-surface-variant text-xs sm:text-sm leading-relaxed mb-6">
                 Fast turnaround times designed to meet tight business launches, class timetables, and event deadlines.
               </p>
-              <div className="mt-auto pt-6 border-t border-on-primary-container/20">
-                <p className="text-4xl font-mono font-bold">24<span className="text-lg opacity-50">HR</span></p>
-                <p className="text-[10px] opacity-70 mt-1 uppercase">SME Express Queue</p>
+              <div className="mt-auto pt-6 border-t border-outline-variant/30">
+                <p className="text-4xl font-mono font-bold text-primary text-glow">24<span className="text-lg opacity-50 text-on-surface ml-1">HR</span></p>
+                <p className="text-[10px] text-on-surface-variant mt-1 uppercase">SME Express Queue</p>
               </div>
             </motion.div>
 
