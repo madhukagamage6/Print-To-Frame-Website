@@ -73,12 +73,12 @@
 }
 
 .glow-effect:hover {
-  box-shadow: 0 0 40px rgba(37, 99, 235, 0.1);
-  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: 0 0 40px rgba(0, 218, 243, 0.15);
+  border-color: rgba(0, 218, 243, 0.4);
 }
 
 .text-glow {
-  text-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+  text-shadow: 0 0 15px rgba(0, 218, 243, 0.6), 0 0 5px rgba(0, 218, 243, 0.2);
 }
 
 .glass-panel {

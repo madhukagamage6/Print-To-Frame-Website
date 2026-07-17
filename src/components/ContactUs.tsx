@@ -19,12 +19,16 @@ export default function ContactUs() {
     
     if (!formData.name.trim()) {
       newErrors.name = 'Full name is required';
+    } else if (formData.name.trim().length < 3) {
+      newErrors.name = 'Please enter your full name (at least 3 characters)';
+    } else if (!/^[a-zA-Z\s.-]+$/.test(formData.name)) {
+      newErrors.name = 'Name can only contain letters, spaces, dots, and hyphens';
     }
     
     if (!formData.phone.trim()) {
       newErrors.phone = 'Mobile number is required';
-    } else if (!/^[0-9]{9}$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter exactly 9 digits (e.g. 771234567)';
+    } else if (!/^[7][0-9]{8}$/.test(formData.phone)) {
+      newErrors.phone = 'Please enter a valid Sri Lankan mobile number starting with 7 (e.g. 771234567)';
     }
 
     if (!formData.intent) {
@@ -39,15 +43,35 @@ export default function ContactUs() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateField = (field: string, value: string) => {
+    const newErrors = { ...errors };
+    if (field === 'name') {
+      if (!value.trim()) {
+        newErrors.name = 'Full name is required';
+      } else if (value.trim().length < 3) {
+        newErrors.name = 'Please enter your full name (at least 3 characters)';
+      } else if (!/^[a-zA-Z\s.-]+$/.test(value)) {
+        newErrors.name = 'Name can only contain letters, spaces, dots, and hyphens';
+      } else {
+        delete newErrors.name;
+      }
+    } else if (field === 'phone') {
+      if (!value.trim()) {
+        newErrors.phone = 'Mobile number is required';
+      } else if (!/^[7][0-9]{8}$/.test(value)) {
+        newErrors.phone = 'Please enter a valid Sri Lankan mobile number starting with 7 (e.g. 771234567)';
+      } else {
+        delete newErrors.phone;
+      }
+    }
+    setErrors(newErrors);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
       setSubmitted(true);
-
-      // Trigger the tel: protocol to automatically open the dialer
-      // with the company's contact number.
-      window.location.href = 'tel:+94770000000';
     }
   };
 
@@ -74,32 +98,6 @@ export default function ContactUs() {
           </p>
         </div>
 
-        {submitted ? (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-8"
-          >
-            <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-6 border border-emerald-500/30">
-              <CheckCircle className="w-8 h-8 text-emerald-400" />
-            </div>
-            <h3 className="font-display text-2xl font-semibold text-on-surface mb-2">Request Received!</h3>
-            <p className="font-sans text-on-surface-variant mb-8">
-              Our support agent will call you at <strong>{formData.phone}</strong> within two minutes.
-            </p>
-
-            <div className="pt-6 border-t border-outline-variant/20">
-              <p className="text-sm text-on-surface-variant mb-4">Need immediate assistance?</p>
-              <a 
-                href="tel:+94770000000" 
-                className="inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary-container hover:bg-primary-fixed py-4 px-8 rounded-lg text-base font-bold transition-all shadow-[0_0_15px_rgba(0,218,243,0.15)] hover:shadow-[0_0_25px_rgba(0,218,243,0.3)]"
-              >
-                <PhoneCall className="w-5 h-5" />
-                Call Us Directly Now
-              </a>
-            </div>
-          </motion.div>
-        ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="font-sans text-xs text-on-surface-variant block mb-1.5 ml-1">Full Name</label>
@@ -112,6 +110,7 @@ export default function ContactUs() {
                     setFormData({...formData, name: e.target.value});
                     if (errors.name) setErrors({...errors, name: ''});
                   }}
+                  onBlur={e => validateField('name', e.target.value)}
                   className={`w-full bg-surface-container-low border ${errors.name ? 'border-error/50' : 'border-outline-variant/30'} rounded-lg py-3 pl-10 pr-4 text-sm text-on-surface outline-none focus:border-primary-container transition-all`}
                   placeholder="Your Name"
                 />
@@ -132,6 +131,7 @@ export default function ContactUs() {
                     setFormData({...formData, phone: val});
                     if (errors.phone) setErrors({...errors, phone: ''});
                   }}
+                  onBlur={e => validateField('phone', e.target.value)}
                   className={`w-full bg-surface-container-low border ${errors.phone ? 'border-error/50' : 'border-outline-variant/30'} rounded-lg py-3 pl-[4.5rem] pr-4 text-sm text-on-surface outline-none focus:border-primary-container transition-all`}
                   placeholder="7X XXX XXXX"
                 />
@@ -198,6 +198,48 @@ export default function ContactUs() {
               Request Call Back
             </button>
           </form>
+
+        {submitted && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              className="bg-surface-container border border-outline-variant/30 rounded-2xl p-8 max-w-md w-full shadow-[0_0_50px_rgba(0,218,243,0.2)] text-center relative overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+              
+              <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-6 border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                <CheckCircle className="w-10 h-10 text-emerald-400" />
+              </div>
+              
+              <h3 className="font-display text-3xl font-semibold text-on-surface mb-3 tracking-tight">Request Sent!</h3>
+              
+              <p className="font-sans text-on-surface-variant mb-8 text-base">
+                Thank you, <span className="text-on-surface font-medium">{formData.name}</span>. Our support agent will call you at <strong className="text-primary-container tracking-wide">+94 {formData.phone}</strong> within two minutes.
+              </p>
+
+              <div className="flex flex-col gap-3">
+                <button 
+                  onClick={() => {
+                    setSubmitted(false);
+                    setFormData({ name: '', phone: '', intent: '' });
+                    setCaptchaValue(null);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface py-3.5 rounded-lg text-sm font-medium transition-all border border-outline-variant/30"
+                >
+                  Close & Return
+                </button>
+                
+                <a 
+                  href="tel:+94770000000" 
+                  className="w-full flex items-center justify-center gap-2 bg-primary-container/10 text-primary-container hover:bg-primary-container/20 py-3.5 rounded-lg text-sm font-medium transition-all border border-primary-container/30"
+                >
+                  <PhoneCall className="w-4 h-4" />
+                  Call Us Directly Instead
+                </a>
+              </div>
+            </motion.div>
+          </div>
         )}
       </motion.div>
     </div>

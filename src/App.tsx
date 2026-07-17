@@ -6,6 +6,7 @@ import Capabilities from './components/Capabilities';
 import Portfolio from './components/Portfolio';
 import PipelineDashboard from './components/PipelineDashboard';
 import ContactUs from './components/ContactUs';
+import PageSkeleton from './components/PageSkeleton';
 import { initAuth, googleSignIn, logout } from './lib/workspace';
 import { User as FirebaseUser } from 'firebase/auth';
 import { 
@@ -18,18 +19,52 @@ import {
   FileSpreadsheet, 
   User as UserIcon,
   ChevronRight,
-  Mail
+  Mail,
+  ArrowUp
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 
 export default function App() {
   const [activePage, setActivePage] = useState<Page>('home');
+  const [isPendingPage, setIsPendingPage] = useState(false);
+  const [pendingPage, setPendingPage] = useState<Page>('home');
+
+  useEffect(() => {
+    setPendingPage(activePage);
+    setIsPendingPage(true);
+    const timer = setTimeout(() => {
+      setIsPendingPage(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [activePage]);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 500) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Authentication State
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  // Scroll Progress
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   useEffect(() => {
     // Initialize Auth Listener on mount
@@ -90,27 +125,33 @@ export default function App() {
       {/* Primary Navigation Bar */}
       <nav className="sticky top-0 z-40 transition-all duration-300 pointer-events-none">
         {/* Main Bar Background */}
-        <div className="absolute top-0 left-0 right-0 h-16 bg-black/90 shadow-sm border-b border-outline-variant/5 pointer-events-auto backdrop-blur-md"></div>
+        <div className="absolute top-0 left-0 right-0 h-16 bg-black/90 shadow-sm border-b border-outline-variant/30 pointer-events-auto backdrop-blur-md"></div>
+        
+        {/* Scroll Progress Bar */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary origin-left z-50 shadow-[0_0_15px_rgba(0,218,243,0.6)]"
+          style={{ scaleX }}
+        />
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-start justify-between relative z-10">
-          {/* Logo / Brand - Dropdown Section */}
+        <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 xl:px-12 flex items-center h-16 relative z-10">
+          {/* Logo / Brand - Integrated Section */}
           <div 
             onClick={() => navigateTo('home')} 
-            className="flex items-center justify-center cursor-pointer group relative z-50 shrink-0 transition-all duration-300 pointer-events-auto bg-black border border-t-0 border-black rounded-b-[1.5rem] px-4 pb-3 pt-2 shadow-[0_10px_20px_rgba(0,0,0,0.5)] -ml-4"
+            className="flex items-center justify-center cursor-pointer group relative z-50 shrink-0 transition-all duration-300 pointer-events-auto bg-transparent px-2 md:px-4 h-16"
           >
             <img 
               src="/logo.png" 
               alt="Print2Frame Logo" 
-              className="h-16 sm:h-20 object-contain transition-transform duration-300 group-hover:scale-105" 
+              className="h-10 sm:h-11 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105" 
               referrerPolicy="no-referrer"
             />
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-8 h-16 pointer-events-auto">
+          <div className="hidden lg:flex items-center gap-4 xl:gap-8 h-16 pointer-events-auto ml-16 xl:ml-28">
             <button 
               onClick={() => navigateTo('home')}
-              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+              className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'home' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
@@ -118,7 +159,7 @@ export default function App() {
             </button>
             <button 
               onClick={() => navigateTo('process')}
-              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+              className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'process' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
@@ -126,23 +167,23 @@ export default function App() {
             </button>
             <button 
               onClick={() => navigateTo('capabilities')}
-              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+              className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'capabilities' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Why Us
             </button>
-            <button 
+            {/* <button 
               onClick={() => navigateTo('portfolio')}
-              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+              className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'portfolio' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Portfolio
-            </button>
+            </button> */}
             <button 
               onClick={() => navigateTo('contact')}
-              className={`font-mono text-lg uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 ${
+              className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'contact' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
@@ -150,11 +191,11 @@ export default function App() {
             </button>
           </div>
 
-          {/* Right Action CTA Button - Dropdown Section */}
-          <div className="hidden md:flex items-center gap-4 pointer-events-auto bg-surface-container border border-t-0 border-outline-variant/5 rounded-b-[1.5rem] px-5 pb-4 pt-3 shadow-[0_10px_20px_rgba(0,0,0,0.1)] -mr-4">
+          {/* Right Action CTA Button */}
+          <div className="hidden lg:flex items-center gap-4 pointer-events-auto ml-auto h-16">
             <button 
               onClick={() => navigateTo('pipeline')}
-              className="inline-flex items-center gap-1.5 bg-primary-container/10 border border-primary-container/30 text-primary-container font-mono text-[11px] uppercase tracking-wider px-4 py-2 rounded hover:bg-primary-container/25 hover:shadow-[0_0_10px_rgba(0,218,243,0.2)] transition-all duration-300"
+              className="inline-flex items-center gap-1.5 bg-primary-container/10 border border-primary-container/30 text-primary-container font-mono text-sm xl:text-base uppercase tracking-normal px-4 py-2 rounded hover:bg-primary-container/25 hover:shadow-[0_0_10px_rgba(0,218,243,0.2)] hover:scale-105 active:scale-95 transition-all duration-300 whitespace-nowrap"
             >
               Portal Login <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
@@ -163,7 +204,7 @@ export default function App() {
           {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden mt-3 text-on-surface-variant hover:text-on-surface p-2 rounded border border-outline-variant/20 bg-surface-container/40 pointer-events-auto"
+            className="lg:hidden ml-auto text-on-surface-variant hover:text-on-surface p-2 rounded border border-outline-variant/20 bg-surface-container/40 pointer-events-auto"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -177,7 +218,7 @@ export default function App() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-b border-outline-variant/25 bg-surface-container-low/95 backdrop-blur-md relative z-30"
+            className="lg:hidden border-b border-outline-variant/25 bg-surface-container-low/95 backdrop-blur-md relative z-30"
           >
             <div className="px-6 py-8 space-y-6 flex flex-col font-mono text-sm uppercase tracking-widest">
               <button 
@@ -198,12 +239,12 @@ export default function App() {
               >
                 Why Us
               </button>
-              <button 
+              {/* <button 
                 onClick={() => navigateTo('portfolio')}
                 className={`text-left ${activePage === 'portfolio' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
               >
                 Portfolio
-              </button>
+              </button> */}
               <button 
                 onClick={() => navigateTo('contact')}
                 className={`text-left ${activePage === 'contact' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
@@ -226,28 +267,40 @@ export default function App() {
       {/* Main Page Render Section with Transitions */}
       <main className="flex-grow z-10">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={activePage}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.35, ease: 'easeInOut' }}
-          >
-            {activePage === 'home' && <Home onNavigate={navigateTo} />}
-            {activePage === 'process' && <Process onNavigate={navigateTo} />}
-            {activePage === 'capabilities' && <Capabilities onNavigate={navigateTo} />}
-            {activePage === 'portfolio' && <Portfolio />}
-            {activePage === 'contact' && <ContactUs />}
-            {activePage === 'pipeline' && (
-              <PipelineDashboard 
-                user={user}
-                token={token}
-                onLogin={handleLogin}
-                onLogout={handleLogout}
-                isLoggingIn={isLoggingIn}
-              />
-            )}
-          </motion.div>
+          {isPendingPage ? (
+            <motion.div
+              key={`skeleton-${pendingPage}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+            >
+              <PageSkeleton page={pendingPage} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key={activePage}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35, ease: 'easeInOut' }}
+            >
+              {activePage === 'home' && <Home onNavigate={navigateTo} />}
+              {activePage === 'process' && <Process onNavigate={navigateTo} />}
+              {activePage === 'capabilities' && <Capabilities onNavigate={navigateTo} />}
+              {activePage === 'portfolio' && <Portfolio />}
+              {activePage === 'contact' && <ContactUs />}
+              {activePage === 'pipeline' && (
+                <PipelineDashboard 
+                  user={user}
+                  token={token}
+                  onLogin={handleLogin}
+                  onLogout={handleLogout}
+                  isLoggingIn={isLoggingIn}
+                />
+              )}
+            </motion.div>
+          )}
         </AnimatePresence>
       </main>
 
@@ -356,6 +409,24 @@ export default function App() {
           <span>&copy; {new Date().getFullYear()} PRINT TO FRAME PVT LTD. ALL RIGHTS RESERVED.</span>
         </div>
       </footer>
+
+      {/* Floating Back to Top Button */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileHover={{ scale: 1.1, boxShadow: "0 0 20px rgba(0, 218, 243, 0.6)" }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-8 right-8 z-50 p-3.5 bg-black/85 hover:bg-black text-primary border border-primary/40 hover:border-primary rounded-full shadow-[0_4px_25px_rgba(0,218,243,0.3)] cursor-pointer transition-all duration-300"
+            aria-label="Back to top"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
