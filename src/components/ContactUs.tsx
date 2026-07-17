@@ -231,7 +231,7 @@ export default function ContactUs() {
                 </button>
                 
                 <a 
-                  href="tel:+94770000000" 
+                  href="tel:+94711419027" 
                   className="w-full flex items-center justify-center gap-2 bg-primary-container/10 text-primary-container hover:bg-primary-container/20 py-3.5 rounded-lg text-sm font-medium transition-all border border-primary-container/30"
                 >
                   <PhoneCall className="w-4 h-4" />
