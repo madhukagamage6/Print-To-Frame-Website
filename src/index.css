@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Hanken Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Zinc 950 base */
+  --color-surface: #09090b;
+  --color-surface-dim: #09090b;
+  --color-surface-bright: #27272a;
+  
+  /* Zinc 900 for cards */
+  --color-surface-container-lowest: #000000;
+  --color-surface-container-low: #09090b;
+  --color-surface-container: #18181b; 
+  --color-surface-container-high: #27272a;
+  --color-surface-container-highest: #3f3f46;
+  
+  /* Text */
+  --color-on-surface: #f4f4f5; /* Zinc 100 */
+  --color-on-surface-variant: #a1a1aa; /* Zinc 400 */
+  --color-inverse-surface: #f4f4f5;
+  --color-inverse-on-surface: #09090b;
+  
+  /* Borders */
+  --color-outline: #52525b; /* Zinc 600 */
+  --color-outline-variant: #27272a; /* Zinc 800 */
+  
+  /* Primary Accent: Blue 600 */
+  --color-surface-tint: #2563eb;
+  --color-primary: #60a5fa; /* Blue 400 */
+  --color-on-primary: #ffffff;
+  --color-primary-container: #2563eb; /* Blue 600 */
+  --color-on-primary-container: #ffffff;
+  --color-inverse-primary: #1d4ed8;
+  
+  /* Secondary: Emerald */
+  --color-secondary: #34d399; /* Emerald 400 */
+  --color-on-secondary: #000000;
+  --color-secondary-container: #10b981; /* Emerald 500 */
+  --color-on-secondary-container: #ffffff;
+  
+  /* Tertiary: Zinc 100 */
+  --color-tertiary: #f4f4f5; 
+  --color-on-tertiary: #09090b;
+  --color-tertiary-container: #e4e4e7;
+  --color-on-tertiary-container: #09090b;
+  
+  --color-error: #fca5a5;
+  --color-on-error: #450a0a;
+  --color-error-container: #7f1d1d;
+  --color-on-error-container: #fecaca;
+  
+  --color-background: #09090b;
+  --color-on-background: #f4f4f5;
+  --color-surface-variant: #27272a;
+}
+
+/* Technical / Cyber Grid Backgrounds */
+.technical-grid {
+  background-image: linear-gradient(rgba(39, 39, 42, 0.5) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(39, 39, 42, 0.5) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center;
+}
+
+.cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+.text-glow {
+  text-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+}
+
+.glass-panel {
+  background-color: var(--color-surface-container);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 1.5rem; /* rounded-3xl equivalent */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Custom styles for google sign in material button */
+.gsi-material-button {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-appearance: none;
+  background-color: #1e2527;
+  background-image: none;
+  border: 1px solid #3b494c;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #dde4e6;
+  cursor: pointer;
+  font-family: 'Roboto', arial, sans-serif;
+  font-size: 14px;
+  height: 40px;
+  letter-spacing: 0.25px;
+  outline: none;
+  overflow: hidden;
+  padding: 0 12px;
+  position: relative;
+  text-align: center;
+  transition: background-color .218s, border-color .218s, box-shadow .218s;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: auto;
+  max-width: 400px;
+  min-width: min-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gsi-material-button:hover {
+  background-color: #242c2e;
+  border-color: #00daf3;
+}
+
+.gsi-material-button-icon {
+  height: 20px;
+  margin-right: 12px;
+  min-width: 20px;
+  width: 20px;
+}
+
+.gsi-material-button-contents {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+

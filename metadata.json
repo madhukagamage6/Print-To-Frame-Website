@@ -1,0 +1,6 @@
+{
+  "name": "Print To Frame",
+  "description": "Precision-engineered structural solutions for large-format display systems. Built for durability, designed for scale.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
