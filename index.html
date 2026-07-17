@@ -9,6 +9,21 @@
     <meta property="og:image" content="/og-image.jpg" />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      if (typeof window !== 'undefined' && window.fetch) {
+        const originalFetch = window.fetch;
+        Object.defineProperty(window, 'fetch', {
+          configurable: true,
+          enumerable: true,
+          get() {
+            return originalFetch;
+          },
+          set() {
+            console.warn('Prevented attempt to overwrite window.fetch');
+          }
+        });
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

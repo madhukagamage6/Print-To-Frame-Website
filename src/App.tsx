@@ -125,7 +125,7 @@ export default function App() {
       {/* Primary Navigation Bar */}
       <nav className="sticky top-0 z-40 transition-all duration-300 pointer-events-none">
         {/* Main Bar Background */}
-        <div className="absolute top-0 left-0 right-0 h-16 bg-black/90 shadow-sm border-b border-outline-variant/30 pointer-events-auto backdrop-blur-md"></div>
+        <div className="absolute top-0 left-0 right-0 h-16 bg-[#0b0e14] shadow-sm border-b border-outline-variant/30 pointer-events-auto"></div>
         
         {/* Scroll Progress Bar */}
         <motion.div
@@ -148,7 +148,7 @@ export default function App() {
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-4 xl:gap-8 h-16 pointer-events-auto ml-16 xl:ml-28">
+          <div className="hidden lg:flex items-center justify-center gap-4 xl:gap-8 h-16 pointer-events-auto absolute left-1/2 -translate-x-1/2">
             <button 
               onClick={() => navigateTo('home')}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
