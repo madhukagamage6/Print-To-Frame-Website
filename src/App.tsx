@@ -121,6 +121,10 @@ export default function App() {
   };
 
   const navigateTo = (page: Page) => {
+    if (page === 'pipeline') {
+      window.location.href = 'https://portal.print2frame.xyz/';
+      return;
+    }
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setMobileMenuOpen(false);
