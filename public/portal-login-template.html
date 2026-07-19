@@ -72,7 +72,10 @@
     <div class="w-full max-w-[440px] relative z-10 text-center flex flex-col items-center">
         <!-- Logo Header -->
         <div class="mb-12 inline-block">
-            <h1 class="text-3xl font-display font-bold text-white tracking-tight">Print<span class="text-primary text-glow">2</span>Frame</h1>
+            <div class="flex justify-center mb-6">
+                <img src="./logo-dark.png" alt="Print2Frame Logo" class="h-20 sm:h-24 w-auto object-contain transition-transform duration-300 hover:scale-105" />
+            </div>
+            <h1 class="text-3xl font-display font-bold text-white tracking-tight">Print To Frame</h1>
             <p class="font-mono text-xs text-primary tracking-[0.2em] uppercase mt-1">Fabrication Portal</p>
         </div>
 
@@ -80,10 +83,10 @@
         <div class="w-full bg-surface-container/60 backdrop-blur-md border border-outline-variant/50 rounded-2xl p-8 shadow-2xl relative overflow-hidden group">
             
             <h2 class="text-xl font-display font-semibold text-on-surface mb-2" id="form-title">
-                Sign in to the Fabrication Hub
+                Print To Frame
             </h2>
             <p class="text-on-surface-variant text-sm mb-8" id="form-subtitle">
-                Secure access to your dashboard
+                Sign in to the portal
             </p>
 
             <form class="space-y-4 text-left" onsubmit="event.preventDefault();">
@@ -202,8 +205,8 @@
             } else {
                 signupFields.classList.add('hidden');
                 googleLogin.classList.remove('hidden');
-                formTitle.innerText = 'Sign in to the Fabrication Hub';
-                formSubtitle.innerText = 'Secure access to your dashboard';
+                formTitle.innerText = 'Print To Frame';
+                formSubtitle.innerText = 'Sign in to the portal';
                 submitBtn.innerText = 'Login';
                 toggleText.innerHTML = 'Don\'t have an account? <button onclick="toggleMode()" class="text-primary hover:underline font-medium">Register</button>';
             }

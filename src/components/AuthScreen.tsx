@@ -228,21 +228,19 @@ export default function AuthScreen({ onGoogleSignIn, isLoggingIn, errorMessage }
         className="bg-surface-container border border-outline-variant/30 rounded-2xl p-8 shadow-[0_0_50px_rgba(0,218,243,0.1)]"
       >
         <div className="flex justify-center mb-6">
-          <div className="bg-black border border-outline-variant/10 rounded-xl px-5 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
-            <img 
-              src="/logo.png" 
-              alt="Print2Frame Logo" 
-              className="h-14 sm:h-16 w-auto object-contain"
-              referrerPolicy="no-referrer"
-            />
-          </div>
+          <img 
+            src="/logo-dark.png" 
+            alt="Print2Frame Logo" 
+            className="h-20 sm:h-24 w-auto object-contain transition-transform duration-300 hover:scale-105"
+            referrerPolicy="no-referrer"
+          />
         </div>
         
         <h2 className="font-display text-2xl text-on-surface mb-2 font-semibold">
-          Print To Frame
+          {mode === 'signin' ? 'Print To Frame' : 'Request Access'}
         </h2>
         <p className="font-sans text-on-surface-variant text-sm mb-8">
-          {mode === 'signin' ? 'Sign in to the Fabrication Hub' : 'Request Access to specialized framing services'}
+          {mode === 'signin' ? 'Sign in to the portal' : 'Request access to the portal'}
         </p>
 
         <form onSubmit={handleStandardAuth} className="space-y-4 text-left">
