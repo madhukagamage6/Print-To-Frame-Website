@@ -151,7 +151,7 @@ export default function App() {
             className="flex items-center justify-center cursor-pointer group relative z-50 shrink-0 transition-all duration-300 pointer-events-auto bg-transparent px-2 md:px-4 h-16"
           >
             <img 
-              src="/logo.png" 
+              src="/logo-dark.png" 
               alt="Print2Frame Logo" 
               className="h-10 sm:h-11 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105" 
               referrerPolicy="no-referrer"
