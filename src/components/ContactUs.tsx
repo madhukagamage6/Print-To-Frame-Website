@@ -92,9 +92,9 @@ export default function ContactUs() {
           <div className="w-16 h-16 rounded-2xl bg-primary-container/10 border border-primary-container/20 flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(0,218,243,0.15)]">
             <PhoneCall className="w-8 h-8 text-primary-container" />
           </div>
-          <h2 className="font-display text-3xl text-on-surface mb-2 font-semibold">Call Us</h2>
+          <h2 className="font-display text-3xl text-on-surface mb-2 font-semibold">Contact Us</h2>
           <p className="font-sans text-on-surface-variant max-w-lg mx-auto">
-            If you are in need of a steel frame fabricated and getting your digital print flex fixed to it, call us right now by filling the form. Even if not, our support agent will call you within two minutes.
+            If you need a steel frame fabricated and your digital print flex fixed to it, get in touch with us right now. Request a fast call back below or call our support team directly.
           </p>
         </div>
 

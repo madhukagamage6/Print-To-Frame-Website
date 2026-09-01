@@ -321,7 +321,7 @@ export default function App() {
                 activePage === 'contact' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
-              Call Us
+              Contact Us
             </a>
           </div>
 
@@ -380,7 +380,7 @@ export default function App() {
                   onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}
                   className={`text-left ${activePage === 'contact' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
-                  Call Us
+                  Contact Us
                 </a>
                 <div className="pt-6 border-t border-outline-variant/10">
                   <a 
@@ -508,6 +508,15 @@ export default function App() {
                   className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
                 >
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Why Us
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="/contact-us" 
+                  onClick={(e) => { e.preventDefault(); navigateTo('contact'); }} 
+                  className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
+                >
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Contact Us
                 </a>
               </li>
               <li>
