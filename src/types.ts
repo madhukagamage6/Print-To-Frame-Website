@@ -1,4 +1,4 @@
-export type Page = 'home' | 'process' | 'capabilities' | 'portfolio' | 'pipeline' | 'contact';
+export type Page = 'home' | 'process' | 'capabilities' | 'portfolio' | 'pipeline' | 'contact' | 'privacy' | 'terms';
 
 export interface Order {
   id: string;

@@ -401,9 +401,28 @@ export default function AuthScreen({ onGoogleSignIn, isLoggingIn, errorMessage }
         )}
       </motion.div>
       
-      <p className="mt-8 font-sans text-xs text-on-surface-variant/60">
-        © 2024 Print To Frame Pvt Ltd. All rights reserved.
-      </p>
+      <div className="mt-8 flex flex-col items-center gap-2 font-sans text-xs text-on-surface-variant/60">
+        <div className="flex items-center gap-4">
+          <a 
+            href="/privacy-policy" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hover:text-primary transition-colors underline"
+          >
+            Privacy Policy
+          </a>
+          <span>•</span>
+          <a 
+            href="/terms-of-service" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hover:text-primary transition-colors underline"
+          >
+            Terms of Service
+          </a>
+        </div>
+        <p>© {new Date().getFullYear()} Print To Frame Pvt Ltd. All rights reserved.</p>
+      </div>
     </div>
   );
 }

@@ -6,6 +6,8 @@ import Capabilities from './components/Capabilities';
 import Portfolio from './components/Portfolio';
 import PipelineDashboard from './components/PipelineDashboard';
 import ContactUs from './components/ContactUs';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
 import PageSkeleton from './components/PageSkeleton';
 import { initAuth, googleSignIn, logout } from './lib/workspace';
 import { User as FirebaseUser } from 'firebase/auth';
@@ -24,10 +26,49 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 
+const getPageFromLocation = (): Page => {
+  if (typeof window === 'undefined') return 'home';
+  const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+  const hash = window.location.hash.toLowerCase().replace(/^#\/?/, '');
+
+  if (path === '/privacy-policy' || path === '/privacy' || hash === 'privacy' || hash === 'privacy-policy') {
+    return 'privacy';
+  }
+  if (path === '/terms-of-service' || path === '/terms' || hash === 'terms' || hash === 'terms-of-service') {
+    return 'terms';
+  }
+  if (path === '/process' || hash === 'process') {
+    return 'process';
+  }
+  if (path === '/capabilities' || path === '/why-us' || hash === 'capabilities' || hash === 'why-us') {
+    return 'capabilities';
+  }
+  if (path === '/portfolio' || hash === 'portfolio') {
+    return 'portfolio';
+  }
+  if (path === '/contact' || path === '/call-us' || hash === 'contact' || hash === 'call-us') {
+    return 'contact';
+  }
+  if (path === '/pipeline' || hash === 'pipeline') {
+    return 'pipeline';
+  }
+  return 'home';
+};
+
 export default function App() {
-  const [activePage, setActivePage] = useState<Page>('home');
+  const [activePage, setActivePage] = useState<Page>(() => getPageFromLocation());
   const [isPendingPage, setIsPendingPage] = useState(false);
-  const [pendingPage, setPendingPage] = useState<Page>('home');
+  const [pendingPage, setPendingPage] = useState<Page>(() => getPageFromLocation());
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const targetPage = getPageFromLocation();
+      setActivePage(targetPage);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     setPendingPage(activePage);
@@ -120,12 +161,24 @@ export default function App() {
     }
   };
 
-  const navigateTo = (page: Page) => {
+  const navigateTo = (page: Page, updateHistory = true) => {
     if (page === 'pipeline') {
       window.location.href = 'https://portal.print2frame.xyz/';
       return;
     }
     setActivePage(page);
+
+    if (updateHistory && typeof window !== 'undefined') {
+      let path = '/';
+      if (page === 'privacy') path = '/privacy-policy';
+      else if (page === 'terms') path = '/terms-of-service';
+      else if (page !== 'home') path = `/${page}`;
+
+      if (window.location.pathname !== path) {
+        window.history.pushState({ page }, '', path);
+      }
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setMobileMenuOpen(false);
   };
@@ -305,6 +358,8 @@ export default function App() {
               {activePage === 'capabilities' && <Capabilities onNavigate={navigateTo} />}
               {activePage === 'portfolio' && <Portfolio />}
               {activePage === 'contact' && <ContactUs />}
+              {activePage === 'privacy' && <PrivacyPolicy onNavigate={navigateTo} />}
+              {activePage === 'terms' && <TermsOfService onNavigate={navigateTo} />}
               {activePage === 'pipeline' && (
                 <PipelineDashboard 
                   user={user}
@@ -365,27 +420,32 @@ export default function App() {
             <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">Explore</h4>
             <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-on-surface-variant">
               <li>
-                <button onClick={() => navigateTo('home')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                <button onClick={() => navigateTo('home')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Home
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('process')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                <button onClick={() => navigateTo('process')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Our Process
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('capabilities')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                <button onClick={() => navigateTo('capabilities')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Why Us
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('portfolio')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
-                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Portfolio
+                <button onClick={() => navigateTo('privacy')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Privacy Policy
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('pipeline')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group">
+                <button onClick={() => navigateTo('terms')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Terms of Service
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigateTo('pipeline')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Portal Login
                 </button>
               </li>
@@ -420,8 +480,23 @@ export default function App() {
           </div>
         </div>
 
-        <div className="border-t border-outline-variant/10 py-6 px-6 md:px-12 flex flex-col justify-center items-center gap-4 text-[10px] font-mono text-outline/50 max-w-7xl mx-auto">
+        <div className="border-t border-outline-variant/10 py-6 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] font-mono text-outline/60 max-w-7xl mx-auto">
           <span>&copy; {new Date().getFullYear()} PRINT TO FRAME PVT LTD. ALL RIGHTS RESERVED.</span>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <button 
+              onClick={() => navigateTo('privacy')}
+              className="hover:text-primary transition-colors cursor-pointer"
+            >
+              Privacy Policy
+            </button>
+            <span className="text-outline-variant">•</span>
+            <button 
+              onClick={() => navigateTo('terms')}
+              className="hover:text-primary transition-colors cursor-pointer"
+            >
+              Terms of Service
+            </button>
+          </div>
         </div>
       </footer>
 
