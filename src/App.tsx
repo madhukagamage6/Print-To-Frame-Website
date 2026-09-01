@@ -26,6 +26,49 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 
+const PAGE_SEO: Record<Page, { title: string; description: string; canonical: string }> = {
+  home: {
+    title: 'Print To Frame | High-Impact Digital Prints & Precision Steel Frames',
+    description: 'Professional steel frame fabrication and flex fixing for business billboards and banners. Custom-built in Kadawatha with BIM/LGSF accuracy.',
+    canonical: 'https://www.print2frame.xyz/',
+  },
+  process: {
+    title: 'Our Process - BIM to Roll-Forming Steel Framing | Print To Frame',
+    description: 'Discover how we turn digital artwork into engineered LGS steel frames with our 6-Act fabrication and delivery workflow.',
+    canonical: 'https://www.print2frame.xyz/our-process',
+  },
+  capabilities: {
+    title: 'Why Choose Us - Light Gauge Steel (LGS) Framing | Print To Frame',
+    description: 'Industrial superior fabrication: 100% custom steel frames, precision flex fixing, rapid 24-hour turnaround, and transparent pricing.',
+    canonical: 'https://www.print2frame.xyz/why-us',
+  },
+  contact: {
+    title: 'Contact Us & Request Call Back | Print To Frame Kadawatha',
+    description: 'Request a quick callback from our framing engineers within 2 minutes. Office: No. 58/33 Church Road, Eldeniya, Kadawatha, Sri Lanka.',
+    canonical: 'https://www.print2frame.xyz/contact-us',
+  },
+  portfolio: {
+    title: 'Portfolio & Completed Signage Projects | Print To Frame',
+    description: 'Explore our completed retail signboards, educational institution banners, and outdoor billboard systems.',
+    canonical: 'https://www.print2frame.xyz/portfolio',
+  },
+  privacy: {
+    title: 'Privacy Policy | Print To Frame Pvt Ltd',
+    description: 'Privacy Policy and Google API User Data Policy compliance statement for Print To Frame Pvt Ltd and portal application.',
+    canonical: 'https://www.print2frame.xyz/privacy-policy',
+  },
+  terms: {
+    title: 'Terms of Service | Print To Frame Pvt Ltd',
+    description: 'Terms of Service, fabrication standards, advance payments, and customer agreements for Print To Frame Pvt Ltd.',
+    canonical: 'https://www.print2frame.xyz/terms-of-service',
+  },
+  pipeline: {
+    title: 'Fabrication Portal Login | Print To Frame',
+    description: 'Secure customer and staff login for the Print To Frame cloud fabrication pipeline dashboard.',
+    canonical: 'https://portal.print2frame.xyz/',
+  },
+};
+
 const getPageFromLocation = (): Page => {
   if (typeof window === 'undefined') return 'home';
   const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
@@ -37,19 +80,19 @@ const getPageFromLocation = (): Page => {
   if (path === '/terms-of-service' || path === '/terms' || hash === 'terms' || hash === 'terms-of-service') {
     return 'terms';
   }
-  if (path === '/process' || hash === 'process') {
+  if (path === '/our-process' || path === '/process' || hash === 'our-process' || hash === 'process') {
     return 'process';
   }
-  if (path === '/capabilities' || path === '/why-us' || hash === 'capabilities' || hash === 'why-us') {
+  if (path === '/why-us' || path === '/capabilities' || hash === 'why-us' || hash === 'capabilities') {
     return 'capabilities';
   }
   if (path === '/portfolio' || hash === 'portfolio') {
     return 'portfolio';
   }
-  if (path === '/contact' || path === '/call-us' || hash === 'contact' || hash === 'call-us') {
+  if (path === '/contact-us' || path === '/contact' || path === '/call-us' || hash === 'contact-us' || hash === 'contact' || hash === 'call-us') {
     return 'contact';
   }
-  if (path === '/pipeline' || hash === 'pipeline') {
+  if (path === '/portal-login' || path === '/login' || path === '/pipeline' || hash === 'portal-login' || hash === 'login' || hash === 'pipeline') {
     return 'pipeline';
   }
   return 'home';
@@ -69,6 +112,28 @@ export default function App() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Update dynamic SEO metadata whenever activePage changes
+  useEffect(() => {
+    const seo = PAGE_SEO[activePage] || PAGE_SEO.home;
+    document.title = seo.title;
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', seo.description);
+
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', seo.canonical);
+  }, [activePage]);
 
   useEffect(() => {
     setPendingPage(activePage);
@@ -172,6 +237,10 @@ export default function App() {
       let path = '/';
       if (page === 'privacy') path = '/privacy-policy';
       else if (page === 'terms') path = '/terms-of-service';
+      else if (page === 'process') path = '/our-process';
+      else if (page === 'capabilities') path = '/why-us';
+      else if (page === 'contact') path = '/contact-us';
+      else if (page === 'portfolio') path = '/portfolio';
       else if (page !== 'home') path = `/${page}`;
 
       if (window.location.pathname !== path) {
@@ -203,8 +272,9 @@ export default function App() {
 
         <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 xl:px-12 flex items-center h-16 relative z-10">
           {/* Logo / Brand - Integrated Section */}
-          <div 
-            onClick={() => navigateTo('home')} 
+          <a 
+            href="/"
+            onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
             className="flex items-center justify-center cursor-pointer group relative z-50 shrink-0 transition-all duration-300 pointer-events-auto bg-transparent px-2 md:px-4 h-16"
           >
             <img 
@@ -213,60 +283,56 @@ export default function App() {
               className="h-10 sm:h-11 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105" 
               referrerPolicy="no-referrer"
             />
-          </div>
+          </a>
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center justify-center gap-4 xl:gap-8 h-16 pointer-events-auto absolute left-1/2 -translate-x-1/2">
-            <button 
-              onClick={() => navigateTo('home')}
+            <a 
+              href="/"
+              onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'home' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Home
-            </button>
-            <button 
-              onClick={() => navigateTo('process')}
+            </a>
+            <a 
+              href="/our-process"
+              onClick={(e) => { e.preventDefault(); navigateTo('process'); }}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'process' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Our Process
-            </button>
-            <button 
-              onClick={() => navigateTo('capabilities')}
+            </a>
+            <a 
+              href="/why-us"
+              onClick={(e) => { e.preventDefault(); navigateTo('capabilities'); }}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'capabilities' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Why Us
-            </button>
-            {/* <button 
-              onClick={() => navigateTo('portfolio')}
-              className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
-                activePage === 'portfolio' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
-              }`}
-            >
-              Portfolio
-            </button> */}
-            <button 
-              onClick={() => navigateTo('contact')}
+            </a>
+            <a 
+              href="/contact-us"
+              onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
                 activePage === 'contact' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Call Us
-            </button>
+            </a>
           </div>
 
           {/* Right Action CTA Button */}
           <div className="hidden lg:flex items-center gap-4 pointer-events-auto ml-auto h-16">
-            <button 
-              onClick={() => navigateTo('pipeline')}
+            <a 
+              href="https://portal.print2frame.xyz/"
               className="inline-flex items-center gap-1.5 bg-primary-container/10 border border-primary-container/30 text-primary-container font-mono text-sm xl:text-base uppercase tracking-normal px-4 py-2 rounded hover:bg-primary-container/25 hover:shadow-[0_0_10px_rgba(0,218,243,0.2)] hover:scale-105 active:scale-95 transition-all duration-300 whitespace-nowrap"
             >
               Portal Login <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
+            </a>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -288,43 +354,41 @@ export default function App() {
               className="lg:hidden border-b border-outline-variant/25 bg-surface-container-low/95 backdrop-blur-md relative z-30 pointer-events-auto"
             >
               <div className="px-6 py-8 space-y-6 flex flex-col font-mono text-sm uppercase tracking-widest">
-                <button 
-                  onClick={() => navigateTo('home')}
+                <a 
+                  href="/"
+                  onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
                   className={`text-left ${activePage === 'home' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
                   Home
-                </button>
-                <button 
-                  onClick={() => navigateTo('process')}
+                </a>
+                <a 
+                  href="/our-process"
+                  onClick={(e) => { e.preventDefault(); navigateTo('process'); }}
                   className={`text-left ${activePage === 'process' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
                   Our Process
-                </button>
-                <button 
-                  onClick={() => navigateTo('capabilities')}
+                </a>
+                <a 
+                  href="/why-us"
+                  onClick={(e) => { e.preventDefault(); navigateTo('capabilities'); }}
                   className={`text-left ${activePage === 'capabilities' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
                   Why Us
-                </button>
-                {/* <button 
-                  onClick={() => navigateTo('portfolio')}
-                  className={`text-left ${activePage === 'portfolio' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
-                >
-                  Portfolio
-                </button> */}
-                <button 
-                  onClick={() => navigateTo('contact')}
+                </a>
+                <a 
+                  href="/contact-us"
+                  onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}
                   className={`text-left ${activePage === 'contact' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
                   Call Us
-                </button>
+                </a>
                 <div className="pt-6 border-t border-outline-variant/10">
-                  <button 
-                    onClick={() => navigateTo('pipeline')}
+                  <a 
+                    href="https://portal.print2frame.xyz/"
                     className="w-full text-center flex items-center justify-center gap-2 bg-primary-container/10 border border-primary-container/30 text-primary-container py-3 rounded font-bold hover:bg-primary-container/25 transition-all"
                   >
                     Portal Login <ArrowUpRight className="w-4 h-4" />
-                  </button>
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -420,34 +484,57 @@ export default function App() {
             <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">Explore</h4>
             <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-on-surface-variant">
               <li>
-                <button onClick={() => navigateTo('home')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
+                <a 
+                  href="/" 
+                  onClick={(e) => { e.preventDefault(); navigateTo('home'); }} 
+                  className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
+                >
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Home
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => navigateTo('process')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
+                <a 
+                  href="/our-process" 
+                  onClick={(e) => { e.preventDefault(); navigateTo('process'); }} 
+                  className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
+                >
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Our Process
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => navigateTo('capabilities')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
+                <a 
+                  href="/why-us" 
+                  onClick={(e) => { e.preventDefault(); navigateTo('capabilities'); }} 
+                  className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
+                >
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Why Us
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => navigateTo('privacy')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
+                <a 
+                  href="/privacy-policy" 
+                  onClick={(e) => { e.preventDefault(); navigateTo('privacy'); }} 
+                  className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
+                >
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Privacy Policy
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => navigateTo('terms')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
+                <a 
+                  href="/terms-of-service" 
+                  onClick={(e) => { e.preventDefault(); navigateTo('terms'); }} 
+                  className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
+                >
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Terms of Service
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => navigateTo('pipeline')} className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer">
+                <a 
+                  href="https://portal.print2frame.xyz/" 
+                  className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
+                >
                   <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Portal Login
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -483,19 +570,21 @@ export default function App() {
         <div className="border-t border-outline-variant/10 py-6 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] font-mono text-outline/60 max-w-7xl mx-auto">
           <span>&copy; {new Date().getFullYear()} PRINT TO FRAME PVT LTD. ALL RIGHTS RESERVED.</span>
           <div className="flex items-center gap-4 sm:gap-6">
-            <button 
-              onClick={() => navigateTo('privacy')}
+            <a 
+              href="/privacy-policy" 
+              onClick={(e) => { e.preventDefault(); navigateTo('privacy'); }}
               className="hover:text-primary transition-colors cursor-pointer"
             >
               Privacy Policy
-            </button>
+            </a>
             <span className="text-outline-variant">•</span>
-            <button 
-              onClick={() => navigateTo('terms')}
+            <a 
+              href="/terms-of-service" 
+              onClick={(e) => { e.preventDefault(); navigateTo('terms'); }}
               className="hover:text-primary transition-colors cursor-pointer"
             >
               Terms of Service
-            </button>
+            </a>
           </div>
         </div>
       </footer>
