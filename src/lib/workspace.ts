@@ -1,9 +1,24 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
-import firebaseConfig from '../../firebase-applet-config.json';
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  User,
+} from 'firebase/auth';
 import { Order } from '../types';
 
 // Initialize Firebase
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+};
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -75,7 +90,7 @@ export async function findOrCreateDriveFolder(token: string, folderName: string)
   });
   if (!searchRes.ok) throw new Error('Failed to search Google Drive folders');
   const searchData = await searchRes.json();
-  
+
   if (searchData.files && searchData.files.length > 0) {
     return searchData.files[0].id;
   }
@@ -141,7 +156,8 @@ export async function uploadFileToDrive(
     base64Data +
     closeDelimiter;
 
-  const uploadUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink';
+  const uploadUrl =
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink';
   const uploadRes = await fetch(uploadUrl, {
     method: 'POST',
     headers: {
@@ -158,7 +174,7 @@ export async function uploadFileToDrive(
   }
 
   const uploadData = await uploadRes.json();
-  
+
   // Make the file readable by anyone with link (optional, but nice for previewing)
   try {
     await fetch(`https://www.googleapis.com/drive/v3/files/${uploadData.id}/permissions`, {
@@ -181,7 +197,6 @@ export async function uploadFileToDrive(
     webViewLink: uploadData.webViewLink || `https://drive.google.com/file/d/${uploadData.id}/view`,
   };
 }
-
 
 // ==========================================
 // GOOGLE SHEETS API HELPERS
@@ -324,7 +339,7 @@ export async function updateOrderInSheet(
   // First, fetch all rows to find the matching row index by order ID
   const rows = await readSheetRows(token, spreadsheetId, 'Orders!A2:A1000');
   const rowIndex = rows.findIndex((row) => row[0] === order.id);
-  
+
   if (rowIndex === -1) {
     throw new Error(`Order with ID ${order.id} not found in Google Sheet`);
   }
@@ -355,7 +370,6 @@ export async function updateOrderInSheet(
   await writeSheetRows(token, spreadsheetId, range, values);
 }
 
-
 // ==========================================
 // GMAIL API HELPERS
 // ==========================================
@@ -378,7 +392,7 @@ export async function sendEmailViaGmail(
   ];
 
   const emailContent = emailLines.join('\n');
-  
+
   // Base64Url encode
   const base64EncodedEmail = btoa(unescape(encodeURIComponent(emailContent)))
     .replace(/\+/g, '-')
