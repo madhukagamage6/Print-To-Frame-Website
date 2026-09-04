@@ -75,5 +75,16 @@ Husky runs `lint-staged` on every commit, which lints and formats staged `.ts`/`
 
 ## Deployment
 
-- **Vercel**: `vercel.json` rewrites all routes to `/index.html` for SPA routing.
-- **Firebase Hosting**: `firebase.json` serves the `dist/` directory with SPA rewrites.
+- **Vercel**: `vercel.json` rewrites all routes to `/index.html` for SPA routing. This is the live production host for `www.print2frame.xyz`, connected via Vercel's GitHub integration.
+- **Firebase Hosting**: `firebase.json` serves the `dist/` directory with SPA rewrites. Currently unused/inactive — Firebase in this project is for the Cloud Functions + Firestore lead-capture backend, not hosting.
+
+### Deployment Workflow
+
+Vercel's GitHub integration builds a **Preview** deployment automatically for every push to any branch other than `main`, and a **Production** deployment for every push to `main` — no GitHub Actions or extra config needed.
+
+1. Push work to a `staging` branch (or open a PR from it into `main`).
+2. Review the Preview URL — found on the Vercel dashboard's Deployments tab, on the GitHub commit's status checks, or auto-commented on the PR if one is open.
+3. Once happy with the preview, merge `staging` into `main` (via the PR, or `git merge staging && git push origin main`).
+4. Vercel automatically deploys `main` to the live production site.
+
+Note: the Contact Us form's backend (the `submitLead` Cloud Function, Firestore, and the `info@print2frame.xyz` notification email) is shared infrastructure with no separate staging environment — submitting the form from a Preview deployment creates a real lead and sends a real email, same as production.
