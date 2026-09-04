@@ -1,22 +1,5 @@
-export type Page = 'home' | 'process' | 'capabilities' | 'portfolio' | 'pipeline' | 'contact' | 'privacy' | 'terms';
-
-export interface Order {
-  id: string;
-  customerName: string;
-  customerEmail: string;
-  bannerType: string;
-  bannerWidth: number;
-  bannerHeight: number;
-  frameMaterial: string;
-  currentAct: number; // 0 to 6
-  paymentStatus: 'Advance Pending' | '75% Advance Paid' | 'Fully Paid';
-  driveFolderId?: string;
-  driveFileId?: string;
-  driveFileUrl?: string;
-  createdAt: string;
-  updatedAt: string;
-  notes: string;
-}
+export type Page =
+  'home' | 'process' | 'capabilities' | 'portfolio' | 'pipeline' | 'contact' | 'privacy' | 'terms';
 
 export interface PipelineStep {
   act: string;

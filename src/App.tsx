@@ -4,67 +4,77 @@ import Home from './components/Home';
 import Process from './components/Process';
 import Capabilities from './components/Capabilities';
 import Portfolio from './components/Portfolio';
-import PipelineDashboard from './components/PipelineDashboard';
 import ContactUs from './components/ContactUs';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import PageSkeleton from './components/PageSkeleton';
-import { initAuth, googleSignIn, logout } from './lib/workspace';
-import { User as FirebaseUser } from 'firebase/auth';
-import { 
-  Menu, 
-  X, 
-  Phone, 
-  MapPin, 
-  ArrowUpRight, 
-  Layers, 
-  FileSpreadsheet, 
+import {
+  Menu,
+  X,
+  Phone,
+  MapPin,
+  ArrowUpRight,
+  Layers,
+  FileSpreadsheet,
   User as UserIcon,
   ChevronRight,
   Mail,
-  ArrowUp
+  ArrowUp,
 } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
+
+// The Fabrication Portal / ERP dashboard is a separate application hosted at
+// this subdomain. This site never renders portal UI itself — every entry
+// point below redirects here.
+const PORTAL_URL = 'https://portal.print2frame.xyz/';
 
 const PAGE_SEO: Record<Page, { title: string; description: string; canonical: string }> = {
   home: {
     title: 'Print To Frame | High-Impact Digital Prints & Precision Steel Frames',
-    description: 'Professional steel frame fabrication and flex fixing for business billboards and banners. Custom-built in Kadawatha with BIM/LGSF accuracy.',
+    description:
+      'Professional steel frame fabrication and flex fixing for business billboards and banners. Custom-built in Kadawatha with BIM/LGSF accuracy.',
     canonical: 'https://www.print2frame.xyz/',
   },
   process: {
     title: 'Our Process - BIM to Roll-Forming Steel Framing | Print To Frame',
-    description: 'Discover how we turn digital artwork into engineered LGS steel frames with our 6-Act fabrication and delivery workflow.',
+    description:
+      'Discover how we turn digital artwork into engineered LGS steel frames with our 6-Act fabrication and delivery workflow.',
     canonical: 'https://www.print2frame.xyz/our-process',
   },
   capabilities: {
     title: 'Why Choose Us - Light Gauge Steel (LGS) Framing | Print To Frame',
-    description: 'Industrial superior fabrication: 100% custom steel frames, precision flex fixing, rapid 24-hour turnaround, and transparent pricing.',
+    description:
+      'Industrial superior fabrication: 100% custom steel frames, precision flex fixing, rapid 24-hour turnaround, and transparent pricing.',
     canonical: 'https://www.print2frame.xyz/why-us',
   },
   contact: {
     title: 'Contact Us & Request Call Back | Print To Frame Kadawatha',
-    description: 'Request a quick callback from our framing engineers within 2 minutes. Office: No. 58/33 Church Road, Eldeniya, Kadawatha, Sri Lanka.',
+    description:
+      'Request a quick callback from our framing engineers within 2 minutes. Office: No. 58/33 Church Road, Eldeniya, Kadawatha, Sri Lanka.',
     canonical: 'https://www.print2frame.xyz/contact-us',
   },
   portfolio: {
     title: 'Portfolio & Completed Signage Projects | Print To Frame',
-    description: 'Explore our completed retail signboards, educational institution banners, and outdoor billboard systems.',
+    description:
+      'Explore our completed retail signboards, educational institution banners, and outdoor billboard systems.',
     canonical: 'https://www.print2frame.xyz/portfolio',
   },
   privacy: {
     title: 'Privacy Policy | Print To Frame Pvt Ltd',
-    description: 'Privacy Policy and Google API User Data Policy compliance statement for Print To Frame Pvt Ltd and portal application.',
+    description:
+      'Privacy Policy and Google API User Data Policy compliance statement for Print To Frame Pvt Ltd and portal application.',
     canonical: 'https://www.print2frame.xyz/privacy-policy',
   },
   terms: {
     title: 'Terms of Service | Print To Frame Pvt Ltd',
-    description: 'Terms of Service, fabrication standards, advance payments, and customer agreements for Print To Frame Pvt Ltd.',
+    description:
+      'Terms of Service, fabrication standards, advance payments, and customer agreements for Print To Frame Pvt Ltd.',
     canonical: 'https://www.print2frame.xyz/terms-of-service',
   },
   pipeline: {
     title: 'Fabrication Portal Login | Print To Frame',
-    description: 'Secure customer and staff login for the Print To Frame cloud fabrication pipeline dashboard.',
+    description:
+      'Secure customer and staff login for the Print To Frame cloud fabrication pipeline dashboard.',
     canonical: 'https://portal.print2frame.xyz/',
   },
 };
@@ -74,25 +84,59 @@ const getPageFromLocation = (): Page => {
   const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
   const hash = window.location.hash.toLowerCase().replace(/^#\/?/, '');
 
-  if (path === '/privacy-policy' || path === '/privacy' || hash === 'privacy' || hash === 'privacy-policy') {
+  if (
+    path === '/privacy-policy' ||
+    path === '/privacy' ||
+    hash === 'privacy' ||
+    hash === 'privacy-policy'
+  ) {
     return 'privacy';
   }
-  if (path === '/terms-of-service' || path === '/terms' || hash === 'terms' || hash === 'terms-of-service') {
+  if (
+    path === '/terms-of-service' ||
+    path === '/terms' ||
+    hash === 'terms' ||
+    hash === 'terms-of-service'
+  ) {
     return 'terms';
   }
-  if (path === '/our-process' || path === '/process' || hash === 'our-process' || hash === 'process') {
+  if (
+    path === '/our-process' ||
+    path === '/process' ||
+    hash === 'our-process' ||
+    hash === 'process'
+  ) {
     return 'process';
   }
-  if (path === '/why-us' || path === '/capabilities' || hash === 'why-us' || hash === 'capabilities') {
+  if (
+    path === '/why-us' ||
+    path === '/capabilities' ||
+    hash === 'why-us' ||
+    hash === 'capabilities'
+  ) {
     return 'capabilities';
   }
   if (path === '/portfolio' || hash === 'portfolio') {
     return 'portfolio';
   }
-  if (path === '/contact-us' || path === '/contact' || path === '/call-us' || hash === 'contact-us' || hash === 'contact' || hash === 'call-us') {
+  if (
+    path === '/contact-us' ||
+    path === '/contact' ||
+    path === '/call-us' ||
+    hash === 'contact-us' ||
+    hash === 'contact' ||
+    hash === 'call-us'
+  ) {
     return 'contact';
   }
-  if (path === '/portal-login' || path === '/login' || path === '/pipeline' || hash === 'portal-login' || hash === 'login' || hash === 'pipeline') {
+  if (
+    path === '/portal-login' ||
+    path === '/login' ||
+    path === '/pipeline' ||
+    hash === 'portal-login' ||
+    hash === 'login' ||
+    hash === 'pipeline'
+  ) {
     return 'pipeline';
   }
   return 'home';
@@ -152,7 +196,7 @@ export default function App() {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       if (currentScrollY > 500) {
         setShowScrollTop(true);
       } else {
@@ -163,72 +207,32 @@ export default function App() {
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
         setMobileMenuOpen(false);
       }
-      
+
       lastScrollY = currentScrollY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Authentication State
-  const [user, setUser] = useState<FirebaseUser | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-
   // Scroll Progress
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
+  // The portal is a separate application — visiting /pipeline, /login, or
+  // /portal-login directly (not via navigateTo) should redirect there too.
   useEffect(() => {
-    // Initialize Auth Listener on mount
-    const unsubscribe = initAuth(
-      (currentUser, accessToken) => {
-        setUser(currentUser);
-        setToken(accessToken);
-        setIsLoggingIn(false);
-      },
-      () => {
-        setUser(null);
-        setToken(null);
-        setIsLoggingIn(false);
-      }
-    );
-    return () => unsubscribe();
-  }, []);
-
-  const handleLogin = async () => {
-    setIsLoggingIn(true);
-    try {
-      const result = await googleSignIn();
-      if (result) {
-        setUser(result.user);
-        setToken(result.accessToken);
-      }
-    } catch (err) {
-      console.error('Google authorization failed:', err);
-      throw err;
-    } finally {
-      setIsLoggingIn(false);
+    if (activePage === 'pipeline') {
+      window.location.replace(PORTAL_URL);
     }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      setUser(null);
-      setToken(null);
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
-  };
+  }, [activePage]);
 
   const navigateTo = (page: Page, updateHistory = true) => {
     if (page === 'pipeline') {
-      window.location.href = 'https://portal.print2frame.xyz/';
+      window.location.replace(PORTAL_URL);
       return;
     }
     setActivePage(page);
@@ -257,13 +261,11 @@ export default function App() {
       {/* Background Matrix-styled line layout */}
       <div className="absolute inset-0 technical-grid opacity-15 pointer-events-none z-0"></div>
 
-
-
       {/* Primary Navigation Bar */}
       <nav className="sticky top-0 z-40 transition-all duration-300 pointer-events-none">
         {/* Main Bar Background */}
         <div className="absolute top-0 left-0 right-0 h-16 bg-[#0b0e14] shadow-sm border-b border-outline-variant/30 pointer-events-auto"></div>
-        
+
         {/* Scroll Progress Bar */}
         <motion.div
           className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary origin-left z-50 shadow-[0_0_15px_rgba(0,218,243,0.6)]"
@@ -272,53 +274,76 @@ export default function App() {
 
         <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 xl:px-12 flex items-center h-16 relative z-10">
           {/* Logo / Brand - Integrated Section */}
-          <a 
+          <a
             href="/"
-            onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo('home');
+            }}
             className="flex items-center justify-center cursor-pointer group relative z-50 shrink-0 transition-all duration-300 pointer-events-auto bg-transparent px-2 md:px-4 h-16"
           >
-            <img 
-              src="/logo-dark.png" 
-              alt="Print2Frame Logo" 
-              className="h-10 sm:h-11 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105" 
+            <img
+              src="/logo-dark.png"
+              alt="Print2Frame Logo"
+              className="h-10 sm:h-11 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105"
               referrerPolicy="no-referrer"
             />
           </a>
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center justify-center gap-4 xl:gap-8 h-16 pointer-events-auto absolute left-1/2 -translate-x-1/2">
-            <a 
+            <a
               href="/"
-              onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('home');
+              }}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
-                activePage === 'home' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
+                activePage === 'home'
+                  ? 'text-primary font-medium text-glow border-primary'
+                  : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Home
             </a>
-            <a 
+            <a
               href="/our-process"
-              onClick={(e) => { e.preventDefault(); navigateTo('process'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('process');
+              }}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
-                activePage === 'process' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
+                activePage === 'process'
+                  ? 'text-primary font-medium text-glow border-primary'
+                  : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Our Process
             </a>
-            <a 
+            <a
               href="/why-us"
-              onClick={(e) => { e.preventDefault(); navigateTo('capabilities'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('capabilities');
+              }}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
-                activePage === 'capabilities' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
+                activePage === 'capabilities'
+                  ? 'text-primary font-medium text-glow border-primary'
+                  : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Why Us
             </a>
-            <a 
+            <a
               href="/contact-us"
-              onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('contact');
+              }}
               className={`font-mono text-sm xl:text-base uppercase tracking-normal transition-all duration-300 border-b pb-1 px-1 hover:scale-105 active:scale-95 hover:[text-shadow:0_0_12px_rgba(0,218,243,0.6)] ${
-                activePage === 'contact' ? 'text-primary font-medium text-glow border-primary' : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
+                activePage === 'contact'
+                  ? 'text-primary font-medium text-glow border-primary'
+                  : 'text-on-surface-variant hover:text-primary border-outline-variant/20 hover:border-primary/50'
               }`}
             >
               Contact Us
@@ -327,7 +352,7 @@ export default function App() {
 
           {/* Right Action CTA Button */}
           <div className="hidden lg:flex items-center gap-4 pointer-events-auto ml-auto h-16">
-            <a 
+            <a
               href="https://portal.print2frame.xyz/"
               className="inline-flex items-center gap-1.5 bg-primary-container/10 border border-primary-container/30 text-primary-container font-mono text-sm xl:text-base uppercase tracking-normal px-4 py-2 rounded hover:bg-primary-container/25 hover:shadow-[0_0_10px_rgba(0,218,243,0.2)] hover:scale-105 active:scale-95 transition-all duration-300 whitespace-nowrap"
             >
@@ -336,7 +361,7 @@ export default function App() {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden ml-auto text-on-surface-variant hover:text-on-surface p-2 rounded border border-outline-variant/20 bg-surface-container/40 pointer-events-auto"
           >
@@ -347,43 +372,55 @@ export default function App() {
         {/* Mobile Drawer Navigation Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               className="lg:hidden border-b border-outline-variant/25 bg-surface-container-low/95 backdrop-blur-md relative z-30 pointer-events-auto"
             >
               <div className="px-6 py-8 space-y-6 flex flex-col font-mono text-sm uppercase tracking-widest">
-                <a 
+                <a
                   href="/"
-                  onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('home');
+                  }}
                   className={`text-left ${activePage === 'home' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
                   Home
                 </a>
-                <a 
+                <a
                   href="/our-process"
-                  onClick={(e) => { e.preventDefault(); navigateTo('process'); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('process');
+                  }}
                   className={`text-left ${activePage === 'process' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
                   Our Process
                 </a>
-                <a 
+                <a
                   href="/why-us"
-                  onClick={(e) => { e.preventDefault(); navigateTo('capabilities'); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('capabilities');
+                  }}
                   className={`text-left ${activePage === 'capabilities' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
                   Why Us
                 </a>
-                <a 
+                <a
                   href="/contact-us"
-                  onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('contact');
+                  }}
                   className={`text-left ${activePage === 'contact' ? 'text-primary text-glow' : 'text-on-surface-variant'}`}
                 >
                   Contact Us
                 </a>
                 <div className="pt-6 border-t border-outline-variant/10">
-                  <a 
+                  <a
                     href="https://portal.print2frame.xyz/"
                     className="w-full text-center flex items-center justify-center gap-2 bg-primary-container/10 border border-primary-container/30 text-primary-container py-3 rounded font-bold hover:bg-primary-container/25 transition-all"
                   >
@@ -425,13 +462,9 @@ export default function App() {
               {activePage === 'privacy' && <PrivacyPolicy onNavigate={navigateTo} />}
               {activePage === 'terms' && <TermsOfService onNavigate={navigateTo} />}
               {activePage === 'pipeline' && (
-                <PipelineDashboard 
-                  user={user}
-                  token={token}
-                  onLogin={handleLogin}
-                  onLogout={handleLogout}
-                  isLoggingIn={isLoggingIn}
-                />
+                <div className="max-w-md mx-auto text-center py-24 text-on-surface-variant font-mono text-sm">
+                  Redirecting to the Fabrication Portal...
+                </div>
               )}
             </motion.div>
           )}
@@ -447,7 +480,8 @@ export default function App() {
               Print <span className="text-primary">To</span> Frame Pvt Ltd
             </h2>
             <p className="font-sans text-xs sm:text-sm text-on-surface-variant max-w-sm leading-relaxed">
-              Professional skeletal steel systems custom roll-formed in Kadawatha. Bringing your designs to life with robust framing solutions.
+              Professional skeletal steel systems custom roll-formed in Kadawatha. Bringing your
+              designs to life with robust framing solutions.
             </p>
             <div className="pt-2">
               <span className="inline-block border border-primary/20 bg-primary/5 text-[11px] font-mono text-primary px-3 py-1.5 rounded uppercase tracking-wider">
@@ -458,13 +492,17 @@ export default function App() {
 
           {/* Headquarters / Contact Col */}
           <div className="sm:col-span-2 md:col-span-3 space-y-4">
-            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">Headquarters</h4>
+            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">
+              Headquarters
+            </h4>
             <div className="space-y-3 font-sans text-xs sm:text-sm text-on-surface-variant">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
-                  No. 58/33 Church Road,<br />
-                  Eldeniya, Kadawatha,<br />
+                  No. 58/33 Church Road,
+                  <br />
+                  Eldeniya, Kadawatha,
+                  <br />
                   Sri Lanka.
                 </span>
               </div>
@@ -481,68 +519,95 @@ export default function App() {
 
           {/* Quick links Col */}
           <div className="col-span-1 md:col-span-2 space-y-4">
-            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">Explore</h4>
+            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">
+              Explore
+            </h4>
             <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-on-surface-variant">
               <li>
-                <a 
-                  href="/" 
-                  onClick={(e) => { e.preventDefault(); navigateTo('home'); }} 
+                <a
+                  href="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('home');
+                  }}
                   className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
                 >
-                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Home
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" />{' '}
+                  Home
                 </a>
               </li>
               <li>
-                <a 
-                  href="/our-process" 
-                  onClick={(e) => { e.preventDefault(); navigateTo('process'); }} 
+                <a
+                  href="/our-process"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('process');
+                  }}
                   className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
                 >
-                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Our Process
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" />{' '}
+                  Our Process
                 </a>
               </li>
               <li>
-                <a 
-                  href="/why-us" 
-                  onClick={(e) => { e.preventDefault(); navigateTo('capabilities'); }} 
+                <a
+                  href="/why-us"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('capabilities');
+                  }}
                   className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
                 >
-                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Why Us
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" />{' '}
+                  Why Us
                 </a>
               </li>
               <li>
-                <a 
-                  href="/contact-us" 
-                  onClick={(e) => { e.preventDefault(); navigateTo('contact'); }} 
+                <a
+                  href="/contact-us"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('contact');
+                  }}
                   className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
                 >
-                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Contact Us
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" />{' '}
+                  Contact Us
                 </a>
               </li>
               <li>
-                <a 
-                  href="/privacy-policy" 
-                  onClick={(e) => { e.preventDefault(); navigateTo('privacy'); }} 
+                <a
+                  href="/privacy-policy"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('privacy');
+                  }}
                   className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
                 >
-                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Privacy Policy
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" />{' '}
+                  Privacy Policy
                 </a>
               </li>
               <li>
-                <a 
-                  href="/terms-of-service" 
-                  onClick={(e) => { e.preventDefault(); navigateTo('terms'); }} 
+                <a
+                  href="/terms-of-service"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('terms');
+                  }}
                   className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
                 >
-                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Terms of Service
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" />{' '}
+                  Terms of Service
                 </a>
               </li>
               <li>
-                <a 
-                  href="https://portal.print2frame.xyz/" 
+                <a
+                  href="https://portal.print2frame.xyz/"
                   className="hover:text-primary transition-colors text-left flex items-center gap-1.5 group cursor-pointer"
                 >
-                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" /> Portal Login
+                  <ChevronRight className="w-3.5 h-3.5 text-outline-variant group-hover:text-primary transition-colors" />{' '}
+                  Portal Login
                 </a>
               </li>
             </ul>
@@ -550,7 +615,9 @@ export default function App() {
 
           {/* Core Expertise Col */}
           <div className="col-span-1 md:col-span-3 space-y-4">
-            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">Solutions</h4>
+            <h4 className="font-mono text-xs uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2">
+              Solutions
+            </h4>
             <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-on-surface-variant">
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
@@ -577,19 +644,27 @@ export default function App() {
         </div>
 
         <div className="border-t border-outline-variant/10 py-6 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] font-mono text-outline/60 max-w-7xl mx-auto">
-          <span>&copy; {new Date().getFullYear()} PRINT TO FRAME PVT LTD. ALL RIGHTS RESERVED.</span>
+          <span>
+            &copy; {new Date().getFullYear()} PRINT TO FRAME PVT LTD. ALL RIGHTS RESERVED.
+          </span>
           <div className="flex items-center gap-4 sm:gap-6">
-            <a 
-              href="/privacy-policy" 
-              onClick={(e) => { e.preventDefault(); navigateTo('privacy'); }}
+            <a
+              href="/privacy-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('privacy');
+              }}
               className="hover:text-primary transition-colors cursor-pointer"
             >
               Privacy Policy
             </a>
             <span className="text-outline-variant">•</span>
-            <a 
-              href="/terms-of-service" 
-              onClick={(e) => { e.preventDefault(); navigateTo('terms'); }}
+            <a
+              href="/terms-of-service"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('terms');
+              }}
               className="hover:text-primary transition-colors cursor-pointer"
             >
               Terms of Service
@@ -605,7 +680,7 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            whileHover={{ scale: 1.1, boxShadow: "0 0 20px rgba(0, 218, 243, 0.6)" }}
+            whileHover={{ scale: 1.1, boxShadow: '0 0 20px rgba(0, 218, 243, 0.6)' }}
             whileTap={{ scale: 0.95 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="fixed bottom-8 right-8 z-50 p-3.5 bg-black/85 hover:bg-black text-primary border border-primary/40 hover:border-primary rounded-full shadow-[0_4px_25px_rgba(0,218,243,0.3)] cursor-pointer transition-all duration-300"

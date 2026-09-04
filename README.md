@@ -1,6 +1,6 @@
 # Print To Frame — Website
 
-Marketing website and customer fabrication portal for Print To Frame Pvt Ltd, a Sri Lankan steel-frame and digital print fabrication company.
+Marketing website for Print To Frame Pvt Ltd, a Sri Lankan steel-frame and digital print fabrication company. The staff/customer Fabrication Portal is a separate application hosted at `portal.print2frame.xyz`; this site only links out to it.
 
 Live site: https://www.print2frame.xyz
 
@@ -9,7 +9,7 @@ Live site: https://www.print2frame.xyz
 - **React 19** + **TypeScript**
 - **Vite 6** (dev server / build)
 - **Tailwind CSS 4**
-- **Firebase** (Google Workspace auth for the fabrication portal)
+- **Firebase** (Cloud Functions + Firestore backend for the Contact Us lead-capture form)
 - **Motion** (animations)
 - **Vitest** + **React Testing Library** (tests)
 - **ESLint** + **Prettier** (linting/formatting)
@@ -53,19 +53,20 @@ Live site: https://www.print2frame.xyz
 
 Copy `.env.example` to `.env.local` (gitignored) and fill in:
 
-- `VITE_RECAPTCHA_SITE_KEY` — Google reCAPTCHA v3 site key, used on the contact form.
-- `VITE_FIREBASE_*` — Firebase Web App config, from Firebase Console → Project Settings → General → Your apps. Used for Google sign-in on the fabrication portal (`/portal-login`).
+- `VITE_RECAPTCHA_SITE_KEY` — Google reCAPTCHA v2 site key, used on the contact form.
+- `VITE_FIREBASE_*` — Firebase Web App config, from Firebase Console → Project Settings → General → Your apps. Used to call the `submitLead` Cloud Function (see `functions/`) that stores Contact Us submissions in Firestore and emails `info@print2frame.xyz`.
 - `GEMINI_API_KEY`, `APP_URL` — legacy variables retained from the original AI Studio scaffold; not required for local development of the marketing site.
 
 ## Project Structure
 
 ```
 src/
-  components/   Page-level React components (Home, Process, Capabilities, Portfolio, ContactUs, PipelineDashboard, ...)
-  lib/          Firebase auth + Google Workspace API helpers (workspace.ts)
+  components/   Page-level React components (Home, Process, Capabilities, Portfolio, ContactUs, ...)
+  lib/          firebase.ts (shared app instance), leads.ts (calls the submitLead function)
   App.tsx       Root component: routing, navigation, SEO metadata
   types.ts      Shared TypeScript types
 public/         Static assets served as-is (favicons, logos, sitemap, robots.txt)
+functions/      Cloud Functions backend for the Contact Us form (Firestore write + email via Gmail SMTP)
 ```
 
 ## Git Hooks
