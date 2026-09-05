@@ -87,4 +87,6 @@ Vercel's GitHub integration builds a **Preview** deployment automatically for ev
 3. Once happy with the preview, merge `staging` into `main` (via the PR, or `git merge staging && git push origin main`).
 4. Vercel automatically deploys `main` to the live production site.
 
+If you're using Claude Code, the `/staging-deploy` skill automates steps 1-4 in one sitting: it pushes to staging, waits for the Preview build, reports the URL, opens the PR, and pauses to ask before merging.
+
 Note: the Contact Us form's backend (the `submitLead` Cloud Function, Firestore, and the `info@print2frame.xyz` notification email) is shared infrastructure with no separate staging environment — submitting the form from a Preview deployment creates a real lead and sends a real email, same as production.
